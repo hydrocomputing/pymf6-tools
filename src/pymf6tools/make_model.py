@@ -15,6 +15,14 @@ def _get_mf6_exe(exe_name):
     return exe_name
 
 
+def _save_model_file_names(model_path, model_file_names):
+    """Save names of input model files to file"""
+    internal = Path(model_path) / '.internal'
+    internal.mkdir(exist_ok=True)
+    files = internal / 'model_files'
+    files.write_text('\n'.join(sorted(model_file_names)))
+
+
 def make_input(
         model_data,
         exe_name=None,
@@ -127,16 +135,10 @@ def make_input(
 
     if model_data['transport']:
         make_transport_model(sim, model_data)
-
     sim.write_simulation()
     model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
     model_file_names.add('mfsim.nam')
-    model_file_names.add('.internal')
-    internal = Path(model_path) / '.internal'
-    internal.mkdir(exist_ok=True)
-    files = internal / 'model_files'
-    files.write_text('\n'.join(sorted(model_file_names)))
-    return model_file_names
+    _save_model_file_names(model_path, model_file_names)
 
 
 def make_transport_model(sim, model_data):

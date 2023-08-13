@@ -16,5 +16,9 @@ def test_base_flow():
         'transport': False,
         }
     model_data = make_model_data(specific_model_data)
-    model_file_names = make_input(model_data)
-    assert model_file_names == set(path.name for path in model_path.glob('*'))
+    make_input(model_data)
+    found_files = set(path.name for path in model_path.glob('*'))
+    found_files.remove('.internal')
+    model_file_names = set((model_path / '.internal' / 'model_files'
+                        ).read_text().split('\n'))
+    assert model_file_names == found_files
