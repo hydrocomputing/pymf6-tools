@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "pymf6tools"
 description = "Tools for creating models to be used with pymf6"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 keywords = [
     "MODFLOW6",
     "groundwater",
@@ -30,6 +30,8 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Hydrology"
 ]
 
+
+dependencies = ["flopy"]
 dynamic = ["version"]
 
 [project.scripts]
