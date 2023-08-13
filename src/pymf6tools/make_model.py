@@ -15,12 +15,15 @@ def _get_mf6_exe(exe_name):
     return exe_name
 
 
-def _save_model_file_names(model_path, model_file_names):
+def _save_model_file_names(model_path, model_file_names, append=False):
     """Save names of input model files to file"""
     internal = Path(model_path) / '.internal'
     internal.mkdir(exist_ok=True)
     files = internal / 'model_files'
-    files.write_text('\n'.join(sorted(model_file_names)))
+    old_content = ''
+    if append:
+        old_content = files.read_text() + '\n'
+    files.write_text(old_content + '\n'.join(sorted(model_file_names)))
 
 
 def make_input(
@@ -132,18 +135,20 @@ def make_input(
         head_filerecord=head_file,
         saverecord=[('HEAD', 'ALL'), ('BUDGET', 'ALL')])
     file_extensions.append('oc')
-
-    if model_data['transport']:
-        make_transport_model(sim, model_data)
     sim.write_simulation()
+    if model_data['transport']:
+        file_extensions.append('gwfgwt')
     model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
     model_file_names.add('mfsim.nam')
     _save_model_file_names(model_path, model_file_names)
+    if model_data['transport']:
+        make_transport_model(sim, model_data)
 
 
 def make_transport_model(sim, model_data):
     """Create MODFLOW 6 input for transport model"""
     # Instantiating MODFLOW 6 groundwater transport package
+    model_path = model_data['model_path']
     gwtname = 'gwt_' + model_data['name']
     gwt = flopy.mf6.MFModel(
         sim,
@@ -151,6 +156,7 @@ def make_transport_model(sim, model_data):
         modelname=gwtname,
         model_nam_file=f'{gwtname}.nam'
     )
+    file_extensions = ['nam']
     gwt.name_file.save_flows = True
 
     # create iterative model solution and register the gwt model with it
@@ -169,6 +175,7 @@ def make_transport_model(sim, model_data):
         # relaxation_factor=relax,
         filename=f'{gwtname}.ims'
     )
+    file_extensions.append('ims')
     sim.register_ims_package(imsgwt, [gwt.name])
 
     # Instantiating MODFLOW 6 transport discretization package
@@ -177,16 +184,19 @@ def make_transport_model(sim, model_data):
         **model_data['dim_kwargs'],
         filename=f'{gwtname}.dis'
     )
+    file_extensions.append('dis')
 
     # Instantiating MODFLOW 6 transport initial concentrations
     flopy.mf6.ModflowGwtic(
         gwt, strt=model_data['initial_concentration'], filename=f'{gwtname}.ic'
     )
+    file_extensions.append('ic')
 
     # Instantiating MODFLOW 6 transport advection package
     flopy.mf6.ModflowGwtadv(
         gwt, scheme=model_data['scheme'], filename=f'{gwtname}.adv'
     )
+    file_extensions.append('adv')
 
     # Instantiating MODFLOW 6 transport dispersion package
     long_disp = model_data['longitudinal_dispersivity']
@@ -199,6 +209,7 @@ def make_transport_model(sim, model_data):
             ath1=long_disp * ratio,
             filename=f'{gwtname}.dsp'
         )
+    file_extensions.append('dsp')
 
     # Instantiating MODFLOW 6 transport mass storage package
     # (formerly "reaction" package in MT3DMS)
@@ -213,6 +224,7 @@ def make_transport_model(sim, model_data):
         distcoef=None,
         filename=f'{gwtname}.mst'
     )
+    file_extensions.append('mst')
 
     # Instantiating MODFLOW 6 transport source-sink mixing package
     sourcerecarray = [
@@ -222,11 +234,13 @@ def make_transport_model(sim, model_data):
     flopy.mf6.ModflowGwtssm(
         gwt, sources=sourcerecarray, filename=f'{gwtname}.ssm'
     )
+    file_extensions.append('ssm')
     if 'cnc' in model_data:
         flopy.mf6.ModflowGwtcnc(
             gwt,
             stress_period_data=model_data['cnc']
         )
+        file_extensions.append('cnc')
     # Instantiating MODFLOW 6 transport output control package
     flopy.mf6.ModflowGwtoc(
         gwt,
@@ -238,6 +252,7 @@ def make_transport_model(sim, model_data):
         saverecord=[('CONCENTRATION', 'LAST'), ('BUDGET', 'LAST')],
         printrecord=[('CONCENTRATION', 'LAST'), ('BUDGET', 'LAST')],
     )
+    file_extensions.append('oc')
 
     # Instantiate observation package (for transport)
     obs = model_data['obs']
@@ -258,6 +273,8 @@ def make_transport_model(sim, model_data):
         exgmnameb=gwtname,
         filename=f'{model_data["name"]}.gwfgwt'
     )
+    model_file_names = set(f'{gwtname}.{ext}' for ext in file_extensions)
+    _save_model_file_names(model_path, model_file_names, append=True)
 
 
 def get_simulation(model_path, exe_name=None, verbosity_level=0):
