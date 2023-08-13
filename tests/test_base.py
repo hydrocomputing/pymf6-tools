@@ -1,7 +1,18 @@
+import os
 from pathlib import Path
 
 from pymf6tools.make_model import make_input
 from pymf6tools.base_model import make_model_data
+
+
+def rmtree(root):
+    """Remove directory tree"""
+    for p in root.iterdir():
+        if p.is_dir():
+            rmtree(p)
+        else:
+            p.unlink()
+    root.rmdir()
 
 
 def get_full_model_path(path_name):
@@ -9,6 +20,7 @@ def get_full_model_path(path_name):
 
 
 def do_test(specific_model_data, model_path):
+    rmtree(model_path)
     model_data = make_model_data(specific_model_data)
     make_input(model_data)
     found_files = set(path.name for path in model_path.glob('*'))
