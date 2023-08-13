@@ -4,20 +4,7 @@ from pathlib import Path
 from pymf6tools.make_model import make_input
 from pymf6tools.base_model import make_model_data
 
-
-def rmtree(root):
-    """Remove directory tree"""
-    for p in root.iterdir():
-        if p.is_dir():
-            rmtree(p)
-        else:
-            p.unlink()
-    root.rmdir()
-
-
-def get_full_model_path(path_name):
-    return Path(__file__).parent / 'models' / path_name
-
+from pytest_utils import get_full_model_path, rmtree
 
 def do_test(specific_model_data, model_path):
     rmtree(model_path)
