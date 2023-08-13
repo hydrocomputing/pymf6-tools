@@ -135,7 +135,6 @@ def make_input(
         head_filerecord=head_file,
         saverecord=[('HEAD', 'ALL'), ('BUDGET', 'ALL')])
     file_extensions.append('oc')
-    sim.write_simulation()
     if model_data['transport']:
         file_extensions.append('gwfgwt')
     model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
@@ -143,6 +142,7 @@ def make_input(
     _save_model_file_names(model_path, model_file_names)
     if model_data['transport']:
         make_transport_model(sim, model_data)
+    sim.write_simulation()
 
 
 def make_transport_model(sim, model_data):
