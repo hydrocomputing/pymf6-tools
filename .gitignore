@@ -2,3 +2,4 @@ _version.py
 **/__pycache__/**
 *.egg-info
 dist/**
+tests/models/**
