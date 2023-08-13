@@ -1,6 +1,6 @@
-from plotting import show_heads, show_well_head
-from make_model import make_input, run_simulation
-
+from .plotting import show_heads, show_well_head
+from .make_model import make_input, run_simulation
+from ._version import version
 
 """Run all."""
 
@@ -27,6 +27,7 @@ def do_all(model_path, name, wel_q=0, verbosity_level=0):
     show_heads(model_path, name)
     show_well_head(model_path, name, wel_coords)
 
-if __name__ == '__main__':
-    from ._version import version
-    print(f'pymf6tools version {version}')
+
+def main():
+    """pymf6tools version dispaly"""
+    print(f'pymf6tools version: {version}')
