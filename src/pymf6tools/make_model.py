@@ -20,32 +20,40 @@ def make_input(
     """Create MODFLOW 6 input"""
     # pylint: disable-msg=too-many-locals
     exe_name = _get_mf6_exe(exe_name)
+    model_path = model_data['model_path']
+    model_name=model_data['name']
+    file_extensions = ['nam']
     sim = flopy.mf6.MFSimulation(
         sim_name=model_data['name'],
-        sim_ws=model_data['model_path'],
+        sim_ws=model_path,
         exe_name=exe_name,
         verbosity_level=verbosity_level,
     )
     times = model_data['times']
     repeat_times = model_data['repeat_times']
     tdis_rc = [(1.0, 1, 1.0)] + [times] * repeat_times
+    pname = 'tdis'
     flopy.mf6.ModflowTdis(
-        sim, pname="tdis",
+        sim, pname=pname,
         time_units=model_data['time_units'],
         nper=repeat_times + 1,
         perioddata=tdis_rc,
     )
+    file_extensions.append(pname)
     flopy.mf6.ModflowIms(sim)
     gwf = flopy.mf6.ModflowGwf(
         sim,
-        modelname=model_data['name'],
+        modelname=model_name,
         save_flows=True)
+    file_extensions.append('ims')
     dim_kwargs = {name: model_data[name] for name in
                   ['nrow', 'ncol', 'nlay', 'delr', 'delc', 'top', 'botm']
                   }
     model_data['dim_kwargs'] = dim_kwargs
     flopy.mf6.ModflowGwfdis(gwf, **dim_kwargs)
+    file_extensions.append('dis')
     flopy.mf6.ModflowGwfic(gwf)
+    file_extensions.append('ic')
     flopy.mf6.ModflowGwfnpf(
         gwf,
         save_flows=True,
@@ -54,6 +62,7 @@ def make_input(
         k=model_data['k'],
         k33=model_data['k33'],
     )
+    file_extensions.append('npf')
     sy = flopy.mf6.ModflowGwfsto.sy.empty(  # pylint: disable-msg=invalid-name
         gwf,
         default_value=model_data['sy']
@@ -61,9 +70,10 @@ def make_input(
     ss = flopy.mf6.ModflowGwfsto.ss.empty(  # pylint: disable-msg=invalid-name
         gwf, default_value=model_data['ss']
     )
+    pname = 'sto'
     flopy.mf6.ModflowGwfsto(
         gwf,
-        pname="sto",
+        pname=pname,
         save_flows=True,
         iconvert=1,
         ss=ss,
@@ -71,6 +81,7 @@ def make_input(
         steady_state={0: True},
         transient={index: True for index in range(1, len(times))},
         )
+    file_extensions.append(pname)
 
     stress_period_data = {}
     for index in range(len(times)):
@@ -91,6 +102,7 @@ def make_input(
         stress_period_data=stress_period_data,
         **wel_kwargs,
     )
+    file_extensions.append('wel')
     chd_kwargs = {}
     if model_data['transport']:
         chd_kwargs.update({
@@ -101,6 +113,7 @@ def make_input(
         stress_period_data=model_data['chd'],
         **chd_kwargs
     )
+    file_extensions.append('chd')
     budget_file = model_data['name'] + '.bud'
     head_file = model_data['name'] + '.hds'
     flopy.mf6.ModflowGwfoc(
@@ -108,11 +121,15 @@ def make_input(
         budget_filerecord=budget_file,
         head_filerecord=head_file,
         saverecord=[('HEAD', 'ALL'), ('BUDGET', 'ALL')])
+    file_extensions.append('oc')
 
     if model_data['transport']:
         make_transport_model(sim, model_data)
 
     sim.write_simulation()
+    model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
+    model_file_names.add('mfsim.nam')
+    return model_file_names
 
 
 def make_transport_model(sim, model_data):
