@@ -61,6 +61,10 @@ BASE_TRANSPORT_MODEL_DATA = {
     'dispersivity_ratio': 1.0,
     'porosity': 0.35,
     'obs': None,
+    'chd': [
+        [(0, 0, 0), 1., 0.0],
+        [(0, 9, 9), 1., 0.0]
+    ],
 }
 
 def make_model_data(
