@@ -8,13 +8,7 @@ def get_full_model_path(path_name):
     return Path(__file__).parent / 'models' / path_name
 
 
-def test_base_flow():
-    model_path = get_full_model_path('flow_base')
-    specific_model_data = {
-        'model_path': model_path,
-        'name': 'flowbase',
-        'transport': False,
-        }
+def do_test(specific_model_data, model_path):
     model_data = make_model_data(specific_model_data)
     make_input(model_data)
     found_files = set(path.name for path in model_path.glob('*'))
@@ -22,3 +16,23 @@ def test_base_flow():
     model_file_names = set((model_path / '.internal' / 'model_files'
                         ).read_text().split('\n'))
     assert model_file_names == found_files
+
+
+def test_base_flow():
+    model_path = get_full_model_path('flow_base')
+    specific_model_data = {
+        'model_path': model_path,
+        'name': 'flowbase',
+        'transport': False,
+        }
+    do_test(specific_model_data, model_path)
+
+
+def test_base_transport():
+    model_path = get_full_model_path('transport_base')
+    specific_model_data = {
+        'model_path': model_path,
+        'name': 'transportbase',
+        'transport': True,
+        }
+    do_test(specific_model_data, model_path)
