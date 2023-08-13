@@ -2,8 +2,14 @@
 """
 
 from pathlib import Path
+import shutil
 
 import flopy
+
+CONFIG = {
+    'internal_dir': '.internal',
+    'model_files': 'model_files',
+}
 
 
 def _get_mf6_exe(exe_name):
@@ -15,11 +21,12 @@ def _get_mf6_exe(exe_name):
     return exe_name
 
 
-def _save_model_file_names(model_path, model_file_names, append=False):
+def _save_model_file_names(
+        model_path, model_file_names, append=False, config=CONFIG):
     """Save names of input model files to file"""
-    internal = Path(model_path) / '.internal'
+    internal = Path(model_path) / config['internal_dir']
     internal.mkdir(exist_ok=True)
-    files = internal / 'model_files'
+    files = internal / config['model_files']
     old_content = ''
     if append:
         old_content = files.read_text() + '\n'
@@ -294,3 +301,20 @@ def run_simulation(model_path, verbosity_level=0):
         model_path,
         verbosity_level=verbosity_level)
     sim.run_simulation()
+
+
+def clone_model(src, dst=None, config=CONFIG):
+    """Clone a MODFLOW6 model.
+
+    Copy all input files listed in `.internal/model_files from `src` to
+    `dst`."""
+    src = Path(src)
+    if dst is None:
+        dst = src.parent / (src.name + '_controlled')
+    else:
+        dst = Path(dst)
+    dst.mkdir(exist_ok=True)
+    model_files_path = src / config['internal_dir'] / config['model_files']
+    model_files = model_files_path.read_text().split('\n')
+    for file_name in model_files:
+        shutil.copy(src / file_name, dst / file_name)
