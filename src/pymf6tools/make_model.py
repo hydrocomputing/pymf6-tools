@@ -3,16 +3,23 @@
 
 import flopy
 
-import pymf6
 
-MF6EXE = pymf6.__mf6_exe__
+def _get_mf6_exe(exe_name):
+    """Get name of MODFLOW6 executable"""
+    if exe_name is None:
+        # make pymf6 optional to reduce dependencies
+        import pymf6  # pylint: disable-msg=import-outside-toplevel
+        exe_name = pymf6.__mf6_exe__
+    return exe_name
 
 
 def make_input(
         model_data,
-        exe_name=MF6EXE,
+        exe_name=None,
         verbosity_level=0):
     """Create MODFLOW 6 input"""
+    # pylint: disable-msg=too-many-locals
+    exe_name = _get_mf6_exe(exe_name)
     sim = flopy.mf6.MFSimulation(
         sim_name=model_data['name'],
         sim_ws=model_data['model_path'],
@@ -34,8 +41,8 @@ def make_input(
         modelname=model_data['name'],
         save_flows=True)
     dim_kwargs = {name: model_data[name] for name in
-              ['nrow', 'ncol', 'nlay', 'delr', 'delc', 'top', 'botm']
-              }
+                  ['nrow', 'ncol', 'nlay', 'delr', 'delc', 'top', 'botm']
+                  }
     model_data['dim_kwargs'] = dim_kwargs
     flopy.mf6.ModflowGwfdis(gwf, **dim_kwargs)
     flopy.mf6.ModflowGwfic(gwf)
@@ -47,11 +54,11 @@ def make_input(
         k=model_data['k'],
         k33=model_data['k33'],
     )
-    sy = flopy.mf6.ModflowGwfsto.sy.empty(
+    sy = flopy.mf6.ModflowGwfsto.sy.empty(  # pylint: disable-msg=invalid-name
         gwf,
         default_value=model_data['sy']
     )
-    ss = flopy.mf6.ModflowGwfsto.ss.empty(
+    ss = flopy.mf6.ModflowGwfsto.ss.empty(  # pylint: disable-msg=invalid-name
         gwf, default_value=model_data['ss']
     )
     flopy.mf6.ModflowGwfsto(
@@ -74,7 +81,7 @@ def make_input(
                 value.append(0)
             entry.append(tuple(value))
         stress_period_data[index + 1] = entry
-    wel_kwargs= {}
+    wel_kwargs = {}
     if model_data['transport']:
         wel_kwargs.update({
             'auxiliary': 'CONCENTRATION',
@@ -84,7 +91,7 @@ def make_input(
         stress_period_data=stress_period_data,
         **wel_kwargs,
     )
-    chd_kwargs= {}
+    chd_kwargs = {}
     if model_data['transport']:
         chd_kwargs.update({
             'auxiliary': 'CONCENTRATION',
@@ -109,7 +116,7 @@ def make_input(
 
 
 def make_transport_model(sim, model_data):
-
+    """Create MODFLOW 6 input for transport model"""
     # Instantiating MODFLOW 6 groundwater transport package
     gwtname = 'gwt_' + model_data['name']
     gwt = flopy.mf6.MFModel(
@@ -167,7 +174,8 @@ def make_transport_model(sim, model_data):
             filename=f'{gwtname}.dsp'
         )
 
-    # Instantiating MODFLOW 6 transport mass storage package (formerly "reaction" package in MT3DMS)
+    # Instantiating MODFLOW 6 transport mass storage package
+    # (formerly "reaction" package in MT3DMS)
     flopy.mf6.ModflowGwtmst(
         gwt,
         porosity=model_data['porosity'],
@@ -225,8 +233,10 @@ def make_transport_model(sim, model_data):
         filename=f'{model_data["name"]}.gwfgwt'
     )
 
-def get_simulation(model_path, exe_name=MF6EXE, verbosity_level=0):
+
+def get_simulation(model_path, exe_name=None, verbosity_level=0):
     """Get simulation for a model."""
+    exe_name = _get_mf6_exe(exe_name)
     sim = flopy.mf6.MFSimulation.load(
         sim_ws=model_path,
         exe_name=exe_name,
