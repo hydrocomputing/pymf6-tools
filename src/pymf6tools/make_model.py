@@ -1,6 +1,8 @@
 """Create and run a MODFLOW 6 model with flopy.
 """
 
+from pathlib import Path
+
 import flopy
 
 
@@ -21,7 +23,7 @@ def make_input(
     # pylint: disable-msg=too-many-locals
     exe_name = _get_mf6_exe(exe_name)
     model_path = model_data['model_path']
-    model_name=model_data['name']
+    model_name = model_data['name']
     file_extensions = ['nam']
     sim = flopy.mf6.MFSimulation(
         sim_name=model_data['name'],
@@ -129,6 +131,11 @@ def make_input(
     sim.write_simulation()
     model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
     model_file_names.add('mfsim.nam')
+    model_file_names.add('.internal')
+    internal = Path(model_path) / '.internal'
+    internal.mkdir(exist_ok=True)
+    files = internal / 'model_files'
+    files.write_text('\n'.join(sorted(model_file_names)))
     return model_file_names
 
 
