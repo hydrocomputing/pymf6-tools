@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pymf6tools"
+description = "Tools for creating models to be used with pymf6"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = [
+    "MODFLOW6",
+    "groundwater",
+    "modeling",
+    "dynamic boundary condition"
+    ]
+license = {text = "MIT License"}
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Environment :: Console",
+  "Framework :: Jupyter :: JupyterLab",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Operating System :: MacOS :: MacOS X",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Hydrology"
+]
+
+dynamic = ["version"]
+
+[project.scripts]
+pymf6tools = "pymf6tools.main:main"
+
+# [project.urls]
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests"]
+
+[tool.setuptools.package-dir]
+pymf6 = "src/pymf6tools"
+
+[tool.setuptools_scm]
+write_to = "src/pymf6tools/_version.py"
