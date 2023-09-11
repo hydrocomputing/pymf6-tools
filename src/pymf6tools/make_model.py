@@ -67,12 +67,14 @@ def make_input(
         save_flows=True)
     file_extensions.append('ims')
     dim_kwargs = {name: model_data[name] for name in
-                  ['nrow', 'ncol', 'nlay', 'delr', 'delc', 'top', 'botm']
+                  ['nrow', 'ncol', 'nlay', 'delr', 'delc', 'top', 'botm',
+                   'length_units']
                   }
+    #im_kwargs['lenuni'] = model_data['length_units']
     model_data['dim_kwargs'] = dim_kwargs
     flopy.mf6.ModflowGwfdis(gwf, **dim_kwargs)
     file_extensions.append('dis')
-    flopy.mf6.ModflowGwfic(gwf)
+    flopy.mf6.ModflowGwfic(gwf, strt=model_data['initial_head'])
     file_extensions.append('ic')
     flopy.mf6.ModflowGwfnpf(
         gwf,
@@ -134,6 +136,13 @@ def make_input(
         **chd_kwargs
     )
     file_extensions.append('chd')
+    if model_data['rivers']:
+        flopy.mf6.ModflowGwfriv(
+            gwf,
+            stress_period_data=model_data['rivers'],
+            # **riv_kwargs
+            )
+        file_extensions.append('riv')
     budget_file = model_data['name'] + '.bud'
     head_file = model_data['name'] + '.hds'
     flopy.mf6.ModflowGwfoc(
