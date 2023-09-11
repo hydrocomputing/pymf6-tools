@@ -26,7 +26,8 @@ BASE_MODEL_DATA = {
         1.0,   # tsmult (double) is the multiplier for the length of successive
                # time steps.
     ),
-    'time_units': "DAYS",
+    'time_units': 'DAYS',
+    'length_units': 'meters',
     'repeat_times': 3,  # nper = repeat_times + 1
     #  flopy.mf6.ModflowGwfdis
     'nrow': 10,
@@ -42,6 +43,7 @@ BASE_MODEL_DATA = {
     #  flopy.mf6.ModflowGwfsto
     'sy': 0.2,
     'ss': 0.000001,
+    'initial_head': 1.0,
     # flopy.mf6.ModflowGwfchd(
     'chd': [
         [(0, 0, 0), 1.],
@@ -51,6 +53,7 @@ BASE_MODEL_DATA = {
         [(0, 5, 1), 0.],
     ],
     'transport': False,
+    'rivers': {},
 }
 
 BASE_TRANSPORT_MODEL_DATA = {
