@@ -105,6 +105,7 @@ def make_input(
         )
     file_extensions.append(pname)
 
+    # Stress period data for the well 
     stress_period_data = {}
     for index in range(len(times)):
         entry = []
@@ -130,6 +131,8 @@ def make_input(
         chd_kwargs.update({
             'auxiliary': 'CONCENTRATION',
             'pname': 'CHD-1'})
+        
+    # instanting constant head package 
     flopy.mf6.ModflowGwfchd(
         gwf,
         stress_period_data=model_data['chd'],
@@ -145,6 +148,8 @@ def make_input(
         file_extensions.append('riv')
     budget_file = model_data['name'] + '.bud'
     head_file = model_data['name'] + '.hds'
+
+    # instanting output control package
     flopy.mf6.ModflowGwfoc(
         gwf,
         budget_filerecord=budget_file,
