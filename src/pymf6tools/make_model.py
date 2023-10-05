@@ -53,6 +53,8 @@ def make_input(
     repeat_times = model_data['repeat_times']
     tdis_rc = [(1.0, 1, 1.0)] + [times] * repeat_times
     pname = 'tdis'
+    
+    # Instantiating time discretization package 
     flopy.mf6.ModflowTdis(
         sim, pname=pname,
         time_units=model_data['time_units'],
@@ -72,8 +74,12 @@ def make_input(
                   }
     #im_kwargs['lenuni'] = model_data['length_units']
     model_data['dim_kwargs'] = dim_kwargs
+
+    # Instantiating spatial discretization package 
     flopy.mf6.ModflowGwfdis(gwf, **dim_kwargs)
     file_extensions.append('dis')
+
+    # Instantiating initial conditions package
     flopy.mf6.ModflowGwfic(gwf, strt=model_data['initial_head'])
     file_extensions.append('ic')
     flopy.mf6.ModflowGwfnpf(
@@ -93,6 +99,8 @@ def make_input(
         gwf, default_value=model_data['ss']
     )
     pname = 'sto'
+
+    # Instantiating storage package 
     flopy.mf6.ModflowGwfsto(
         gwf,
         pname=pname,
@@ -120,6 +128,7 @@ def make_input(
         wel_kwargs.update({
             'auxiliary': 'CONCENTRATION',
             'pname': 'WEL-1'})
+    # Instantiating well package 
     flopy.mf6.ModflowGwfwel(
         gwf,
         stress_period_data=stress_period_data,
@@ -132,24 +141,37 @@ def make_input(
             'auxiliary': 'CONCENTRATION',
             'pname': 'CHD-1'})
         
-    # instanting constant head package 
+    # Instantiating constant head package 
     flopy.mf6.ModflowGwfchd(
         gwf,
         stress_period_data=model_data['chd'],
         **chd_kwargs
     )
     file_extensions.append('chd')
+    
+    # Instantiating rivers package 
     if model_data['rivers']:
         flopy.mf6.ModflowGwfriv(
             gwf,
-            stress_period_data=model_data['rivers'],
+            stress_period_data=list(zip(model_data['rivlay'], 
+                                        model_data['rivrow'], 
+                                        model_data['rivcol'], 
+                                        model_data['rivstg'], 
+                                        model_data['rivcnd'], 
+                                        model_data['rivrbt'], 
+                                        model_data['rivbnd'])),
+            boundnames=model_data['river_boundnames'], # boolean to indicate that boundary names may be in river list cells
+            observations= model_data['obs_dict'], # dictionary or data containing data for the observation package
+            timeseries= model_data['tsdict'], # dictionary or data for the time-series 
+            cond= model_data['cond'], # river_bed hydraulic conductivity
+            pname="RIV"
             # **riv_kwargs
             )
         file_extensions.append('riv')
     budget_file = model_data['name'] + '.bud'
     head_file = model_data['name'] + '.hds'
 
-    # instanting output control package
+    # Instantiating output control package
     flopy.mf6.ModflowGwfoc(
         gwf,
         budget_filerecord=budget_file,
