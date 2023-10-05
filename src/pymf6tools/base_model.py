@@ -53,7 +53,10 @@ BASE_MODEL_DATA = {
         [(0, 5, 1), 0.],
     ],
     'transport': False,
-    'rivers': {},
+    'rivlay': 20 * [0],
+    'rivrow': [2, 3, 4, 4, 5, 5, 5, 4, 4, 4, 9, 8, 7, 6, 6, 5, 5, 6, 6, 6],
+    'rivcol': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    'rivstg': None, 
 }
 
 BASE_TRANSPORT_MODEL_DATA = {
