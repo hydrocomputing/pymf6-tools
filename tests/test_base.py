@@ -7,7 +7,10 @@ from pymf6tools.base_model import make_model_data
 from pytest_utils import get_full_model_path, rmtree
 
 def do_test(specific_model_data, model_path):
-    rmtree(model_path)
+    try: 
+        rmtree(model_path)
+    except FileNotFoundError:
+        pass
     model_data = make_model_data(specific_model_data)
     make_input(model_data)
     found_files = set(path.name for path in model_path.glob('*'))
@@ -19,10 +22,12 @@ def do_test(specific_model_data, model_path):
 
 def test_base_flow():
     model_path = get_full_model_path('flow_base')
+    print(model_path)
     specific_model_data = {
         'model_path': model_path,
         'name': 'flowbase',
         'transport': False,
+        'rivers':False,
         }
     do_test(specific_model_data, model_path)
 
@@ -33,5 +38,26 @@ def test_base_transport():
         'model_path': model_path,
         'name': 'transportbase',
         'transport': True,
+        'rivers': False
+        }
+    do_test(specific_model_data, model_path)
+
+def test_base_river():
+    model_path = get_full_model_path('river_base')
+    specific_model_data = {
+        'model_path': model_path,
+        'name': 'riverbase',
+        'transport': False,
+        'rivers': True
+        }
+    do_test(specific_model_data, model_path)
+
+def test_base_transport_river():
+    model_path = get_full_model_path('transport_river_base')
+    specific_model_data = {
+        'model_path': model_path,
+        'name': 'transport_river_base',
+        'transport': True,
+        'rivers': True
         }
     do_test(specific_model_data, model_path)
