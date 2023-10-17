@@ -13,6 +13,7 @@ Assumptions:
 
 
 import sys
+import numpy as np
 
 
 BASE_MODEL_DATA = {
@@ -54,22 +55,6 @@ BASE_MODEL_DATA = {
     ],
     'transport': False,
     'river': False,
-    # only for one river 
-    'rivlay':[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    'river_spd': {  
-        'rivlay':['0', '0','0','0','0','0','0','0','0','0','0','0','0','0','0', '0', '0', '0', '0', '0'],
-        'rivrow':[2, 3, 4, 4, 5, 5, 5, 4, 4, 4, 9, 8, 7, 6, 6, 5, 5, 6, 6, 6],
-        'rivcol':[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-        'rivstg':[], 
-        'rivrbt':[], 
-        'rivcnd':[], 
-        'rivbnd':[],  
-                    } , 
-                     
-    'river_boundnames': None, 
-    'obs_dict': None, # dict, 
-    'tsdict': None, # dict,
-    'cond': None 
 }         
 
 BASE_TRANSPORT_MODEL_DATA = {
@@ -80,16 +65,34 @@ BASE_TRANSPORT_MODEL_DATA = {
     'dispersivity_ratio': 1.0,
     'porosity': 0.35,
     'obs': None,
-    'chd': [
-        [(0, 0, 0), 1., 0.0],
-        [(0, 9, 9), 1., 0.0]
+    'chd_transport': [
+        [(0, 0, 0), 1.0, 0.0],
+        [(0, 9, 9), 1.0, 0.0]
     ],
 }
+
+BASE_RIVER_MODEL_DATA = {
+    'river_spd': {  
+        'rivlay':[0] * 4,
+        'rivrow':[2, 3, 4, 4],
+        'rivcol':[1, 2, 3, 4],
+        'rivstg':[np.linspace(0.9, 0.8, num=BASE_MODEL_DATA['nrow'])], 
+        'rivbot':[np.linspace(0.6, 0.7, num=BASE_MODEL_DATA['nrow'])], 
+        'rivcnd':0.05 
+         
+                    } , 
+                     
+    'river_boundnames': None, 
+    'obs_dict': None, # dict, 
+    'tsdict': None, # dict,
+    'cond': None, 
+}         
 
 def make_model_data(
         specific_model_data,
         base_model_data=BASE_MODEL_DATA,
-        base_transport_model_data=BASE_TRANSPORT_MODEL_DATA):
+        base_transport_model_data=BASE_TRANSPORT_MODEL_DATA,
+        base_river_model_data=BASE_RIVER_MODEL_DATA ):
     """Make model data.
 
     specific_model_data - dictionary with data specific for the current model
@@ -100,6 +103,8 @@ def make_model_data(
     """
     if specific_model_data.get('transport'):
         base_model_data.update(base_transport_model_data)
+    if specific_model_data.get('river'):
+        base_model_data.update(base_river_model_data)
     # old way up to Python 3.8
     if sys.version_info[:2] < (3, 9):
         return {**base_model_data, **specific_model_data}
