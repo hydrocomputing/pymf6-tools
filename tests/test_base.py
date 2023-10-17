@@ -56,7 +56,7 @@ def test_base_transport_river():
     model_path = get_full_model_path('transport_river_base')
     specific_model_data = {
         'model_path': model_path,
-        'name': 'transport_river_base',
+        'name': 'transport_riverbase',
         'transport': True,
         'rivers': True
         }
