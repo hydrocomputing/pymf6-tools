@@ -31,24 +31,24 @@ BASE_MODEL_DATA = {
     'length_units': 'meters',
     'repeat_times': 3,  # nper = repeat_times + 1
     #  flopy.mf6.ModflowGwfdis
-    'nrow': 10,
+    'nrow': 15,
     'ncol': 10,
-    'nlay': 1,
-    'delr': 1.0,
-    'delc': 1.0,
-    'top': 1.0,
-    'botm': 0.0,
+    'nlay': 3,
+    'delr': 100.0,
+    'delc': 100.0,
+    'top': 15.0,
+    'botm': -15.0,
     #  flopy.mf6.ModflowGwfnpf
-    'k': [0.5],  # initial value of k
-    'k33': [0.1],  # vertical anisotropy
+    'k': [0.5, 0.6, 0.5],  # initial value of k
+    'k33': [0.1, 0.2, 0.3],  # vertical anisotropy
     #  flopy.mf6.ModflowGwfsto
     'sy': 0.2,
     'ss': 0.000001,
-    'initial_head': 1.0,
+    'initial_head': 10.0,
     # flopy.mf6.ModflowGwfchd(
     'chd': [
-        [(0, 0, 0), 1.],
-        [(0, 9, 9), 1.]
+        [(0, 0, 0), 10.],
+        [(0, 14, 9), 10.]
     ],
     'cnc': [
         [(0, 5, 1), 0.],
@@ -66,18 +66,18 @@ BASE_TRANSPORT_MODEL_DATA = {
     'porosity': 0.35,
     'obs': None,
     'chd_transport': [
-        [(0, 0, 0), 1.0, 0.0],
-        [(0, 9, 9), 1.0, 0.0]
+        [(0, 0, 0), 10.0, 0.0],
+        [(0, 14, 9), 10.0, 0.0]
     ],
 }
 
 BASE_RIVER_MODEL_DATA = {
     'river_spd': {  
-        'rivlay':[0] * 4,
-        'rivrow':[2, 3, 4, 4],
-        'rivcol':[1, 2, 3, 4],
-        'rivstg':[np.linspace(0.9, 0.8, num=BASE_MODEL_DATA['nrow'])], 
-        'rivbot':[np.linspace(0.6, 0.7, num=BASE_MODEL_DATA['nrow'])], 
+        'rivlay':[0] * 7,
+        'rivrow':[2, 3, 4, 4, 5, 6, 7],
+        'rivcol':[1, 2, 3, 4, 5, 6, 7],
+        'rivstg':[np.linspace(14, 13, num=BASE_MODEL_DATA['nrow'])], 
+        'rivbot':[np.linspace(10, 7, num=BASE_MODEL_DATA['nrow'])], 
         'rivcnd':0.05 
          
                     } , 
