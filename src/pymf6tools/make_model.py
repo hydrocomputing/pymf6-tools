@@ -144,23 +144,13 @@ def make_input(
             'pname': 'CHD-1'})
         
     # Instantiating constant head package
-    if model_data['transport']:
-        flopy.mf6.ModflowGwfchd(
-        gwf,
-        stress_period_data=model_data['chd_transport'],
-        **chd_kwargs
+    flopy.mf6.ModflowGwfchd(
+    gwf,
+    stress_period_data=model_data['chd'],
+    **chd_kwargs
     ) 
-    else: 
-        flopy.mf6.ModflowGwfchd(
-            gwf,
-            stress_period_data=model_data['chd'],
-            **chd_kwargs
-        )
-    file_extensions.append('chd')
 
-    #stress period data river
-    if model_data['river']:
-        make_river(times=times, model_data=model_data, gwf=gwf, file_extensions=file_extensions)
+    file_extensions.append('chd')
 
     budget_file = model_data['name'] + '.bud'
     head_file = model_data['name'] + '.hds'
@@ -179,6 +169,8 @@ def make_input(
     _save_model_file_names(model_path, model_file_names)
     if model_data['transport']:
         make_transport_model(sim, model_data)
+    if model_data['river']:
+        make_river(model_data=model_data, gwf=gwf, file_extensions=file_extensions)
     sim.write_simulation()
 
 
@@ -350,37 +342,30 @@ def clone_model(src, dst=None, config=CONFIG):
     for file_name in model_files:
         shutil.copy(src / file_name, dst / file_name)
 
-def make_river(times, model_data, file_extensions, gwf):
+def make_river( model_data, file_extensions, gwf):
     stress_period_data_river = {}
-    for index in range(len(times)):
-        entry = [] 
-        value = [(list(zip_longest(model_data['rivlay'], 
-                                    model_data['rivrow'], 
-                                    model_data['rivcol'],
-                                    model_data['rivstg'],
-                                    model_data['rivcnd'],
-                                    model_data['rivbot'])
-                                    )) 
-                    #model_data['rivstg'], 
-                    #model_data['rivcnd'], 
-                    #model_data['rivrbt'], 
-                    #model_data['rivbnd'])]
-                    ]
-        value.append(0)
-    entry.append(list(value))
-    stress_period_data_river[index + 1] = entry
+    entry = []
+    riv = model_data['river_spd']
+    for counter in range(len(riv['rivlay'])): 
+            entry.append([
+                riv['rivlay'][counter], 
+                riv['rivrow'][counter], 
+                riv['rivcol'][counter], 
+                riv['rivstg'][counter], 
+                riv['rivbot'][counter], 
+                riv['rivcnd'][counter]])
     riv_kwargs = {}
-    riv_kwargs.update({
-        'auxiliary':'CONCENTRATION',
-        'pname': 'RIV-1'})
+    riv_kwargs.update({'pname':'RIV-1'})
     flopy.mf6.ModflowGwfriv(
             gwf,
-            stress_period_data_river=stress_period_data_river,
+            stress_period_data_river,
             #boundnames=model_data['river_boundnames'], # boolean to indicate that boundary names may be in river list cells
             #observations= model_data['obs_dict'], # dictionary or data containing data for the observation package
            # timeseries= model_data['tsdict'], # dictionary or data for the time-series 
-            pname="RIV"
             **riv_kwargs
             )
     file_extensions.append('riv')
-
+    model_path=model_data['model_path']
+    gwfname=model_data['name']
+    model_file_names = set(f'{gwfname}.{ext}' for ext in file_extensions)
+    _save_model_file_names(model_path, model_file_names, append=True)
