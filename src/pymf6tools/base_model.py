@@ -14,6 +14,7 @@ Assumptions:
 
 import sys
 import numpy as np
+from copy import deepcopy
 
 
 BASE_MODEL_DATA = {
@@ -47,40 +48,40 @@ BASE_MODEL_DATA = {
     'initial_head': 10.0,
     # flopy.mf6.ModflowGwfchd(
     'chd': [
-        [(0, 0, 0), 10.],
+        [(0, 0, 0), 10.], 
         [(0, 14, 9), 10.]
     ],
     'cnc': [
-        [(0, 5, 1), 0.],
+        [(0, 5, 1), 10.], # cell_id, conc (const)
     ],
     'transport': False,
     'river': False,
 }         
 
 BASE_TRANSPORT_MODEL_DATA = {
-    'initial_concentration': 0,
+    'initial_concentration': 1,
     'scheme': 'UPSTREAM', #'TVD',  # or 'UPSTREAM'
     'longitudinal_dispersivity': 1.0,
     # Ratio of transverse to longitudinal dispersitivity
     'dispersivity_ratio': 1.0,
     'porosity': 0.35,
     'obs': None,
-    'chd_transport': [
-        [(0, 0, 0), 10.0, 0.0],
-        [(0, 14, 9), 10.0, 0.0]
+    'chd': [
+        [(0, 0, 0), 10.0, 10.0],
+        [(0, 14, 9), 10.0, 10.0]
     ],
 }
+NRIV = 7 
 
 BASE_RIVER_MODEL_DATA = {
-    'river_spd': {  
-        'rivlay':[0] * 7,
-        'rivrow':[2, 3, 4, 4, 5, 6, 7],
-        'rivcol':[1, 2, 3, 4, 5, 6, 7],
-        'rivstg':[np.linspace(14, 13, num=BASE_MODEL_DATA['nrow'])], 
-        'rivbot':[np.linspace(10, 7, num=BASE_MODEL_DATA['nrow'])], 
-        'rivcnd':0.05 
-         
-                    } , 
+    'river_spd': { 
+        'rivlay': [0] * NRIV,
+        'rivrow': [2, 3, 4, 4, 5, 6, 7],
+        'rivcol': [1, 2, 3, 4, 5, 6, 7],
+        'rivstg': np.linspace(13, 14, NRIV), 
+        'rivbot': np.linspace(7, 10, NRIV), 
+        'rivcnd': [0.05] * NRIV  
+        } , 
                      
     'river_boundnames': None, 
     'obs_dict': None, # dict, 
@@ -101,6 +102,10 @@ def make_model_data(
     base_model_data - dictionary with basic model data defaults to
                       `BASE_MODEL_DATA`
     """
+    base_model_data=deepcopy(base_model_data)
+    base_river_model_data=deepcopy(base_river_model_data)
+    base_transport_model_data=deepcopy(base_transport_model_data)
+    
     if specific_model_data.get('transport'):
         base_model_data.update(base_transport_model_data)
     if specific_model_data.get('river'):
