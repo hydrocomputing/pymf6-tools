@@ -27,10 +27,9 @@ def test_base_flow():
         'model_path': model_path,
         'name': 'flowbase',
         'transport': False,
-        'rivers':False,
+        'river':False,
         }
     do_test(specific_model_data, model_path)
-
 
 def test_base_transport():
     model_path = get_full_model_path('transport_base')
@@ -38,7 +37,7 @@ def test_base_transport():
         'model_path': model_path,
         'name': 'transportbase',
         'transport': True,
-        'rivers': False
+        'river': False
         }
     do_test(specific_model_data, model_path)
 
@@ -48,7 +47,7 @@ def test_base_river():
         'model_path': model_path,
         'name': 'riverbase',
         'transport': False,
-        'rivers': True
+        'river': True
         }
     do_test(specific_model_data, model_path)
 
@@ -58,6 +57,7 @@ def test_base_transport_river():
         'model_path': model_path,
         'name': 'transport_riverbase',
         'transport': True,
-        'rivers': True
+        'river': True
         }
     do_test(specific_model_data, model_path)
+
