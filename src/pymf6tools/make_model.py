@@ -114,28 +114,29 @@ def make_input(
         )
     file_extensions.append(pname)
 
-    # Stress period data for the well 
-    stress_period_data = {}
-    for index in range(len(times)):
-        entry = []
-        for well in model_data['wells'].values():
-            value = [well['coords'], well['q'][index]]
-            if model_data['transport']:
-                value.append(0)
-            entry.append(tuple(value))
-        stress_period_data[index + 1] = entry
-    wel_kwargs = {}
-    if model_data['transport']:
-        wel_kwargs.update({
-            'auxiliary': 'CONCENTRATION',
-            'pname': 'WEL-1'})
-    # Instantiating well package 
-    flopy.mf6.ModflowGwfwel(
-        gwf,
-        stress_period_data=stress_period_data,
-        **wel_kwargs,
-    )
-    file_extensions.append('wel')
+    if 'wells' in model_data: 
+        # Stress period data for the well 
+        stress_period_data = {}
+        for index in range(len(times)):
+            entry = []
+            for well in model_data['wells'].values():
+                value = [well['coords'], well['q'][index]]
+                if model_data['transport']:
+                    value.append(0)
+                entry.append(tuple(value))
+            stress_period_data[index + 1] = entry
+        wel_kwargs = {}
+        if model_data['transport']:
+            wel_kwargs.update({
+                'auxiliary': 'CONCENTRATION',
+                'pname': 'WEL-1'})
+        # Instantiating well package 
+        flopy.mf6.ModflowGwfwel(
+            gwf,
+            stress_period_data=stress_period_data,
+            **wel_kwargs,
+        )
+        file_extensions.append('wel')
 
     chd_kwargs = {}
     if model_data['transport']:
@@ -343,7 +344,6 @@ def clone_model(src, dst=None, config=CONFIG):
         shutil.copy(src / file_name, dst / file_name)
 
 def make_river( model_data, file_extensions, gwf):
-    stress_period_data_river = {}
     entry = []
     riv = model_data['river_spd']
     for counter in range(len(riv['rivlay'])): 
@@ -358,7 +358,7 @@ def make_river( model_data, file_extensions, gwf):
     riv_kwargs.update({'pname':'RIV-1'})
     flopy.mf6.ModflowGwfriv(
             gwf,
-            stress_period_data_river,
+            stress_period_data=entry,
             #boundnames=model_data['river_boundnames'], # boolean to indicate that boundary names may be in river list cells
             #observations= model_data['obs_dict'], # dictionary or data containing data for the observation package
            # timeseries= model_data['tsdict'], # dictionary or data for the time-series 
