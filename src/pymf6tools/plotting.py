@@ -7,7 +7,7 @@ import numpy as np
 import flopy
 from flopy.utils.postprocessing import get_specific_discharge
 
-from pymf6.modeling_tools. make_model import get_simulation
+from pymf6.modeling_tools.make_model import get_simulation
 
 
 def show_heads(
@@ -53,7 +53,7 @@ def show_bcs(
         model_path,
         name,
         title='Boundary Conditions',
-        bc_names = ('chd', 'wel'),
+        bc_names = ('chd', 'wel', 'riv'),
         show_grid=True):
     """Show location of boundary conditions."""
     handles = []
@@ -126,7 +126,9 @@ def show_concentration(
 
 def show_well_head(
         wel_coords,
-        model_data,
+        model_path,
+        model_name,
+        times,
         title='',
         y_start=0.3,
         y_end=1.05,
@@ -134,8 +136,8 @@ def show_well_head(
         lower_head_limit=None,
         x=(0, 32)):
     """Plot head at well over time."""
-    sim = get_simulation(model_data['model_path'], model_data['name'])
-    gwf = sim.get_model(model_data['name'])
+    sim = get_simulation(model_path, model_name)
+    gwf = sim.get_model(model_name)
     print(gwf.output)
     heads = gwf.output.head().get_ts(wel_coords)
     _, ax = plt.subplots()
@@ -144,7 +146,6 @@ def show_well_head(
     ax.set_ylabel('Groundwater level (m)')
     y_stress = (y_start, y_end)
     x_stress_1 = (1, 1)
-    times = model_data['times']
     times_diff = times[0]
     x_stresses = []
     for count in range(1, len(times)):
@@ -181,3 +182,21 @@ def show_well_head(
          color='lightblue', linestyle=':')
     ax.legend(loc=(1.1, 0))
     return ax
+
+# def show_bot_elevations(
+#         model_path, 
+#         name
+#         ):
+#     """Plot bottom elevation of the model"""
+#     ml = flopy.modflow.Modflow.load(name, model_ws=model_path)
+#     bottom_array = ml.dis.botm.array
+
+#     fig = plt.figure(figsize=(8, 8))
+#     ax = fig.add_subplot(1, 1, 1, aspect="equal")
+#     ax.set_title("Model Bottom Elevations")
+#     mapview = flopy.plot.PlotMapView(model=ml, layer=0)
+#     quadmesh = mapview.plot_array(bottom_array)
+#     linecollection = mapview.plot_grid()
+#     cb = plt.colorbar(quadmesh, shrink=0.5)
+
+#     return fig
