@@ -114,7 +114,7 @@ def make_input(
         )
     file_extensions.append(pname)
 
-    if 'wells' in model_data: 
+    if model_data['wells_active']: 
         # Stress period data for the well 
         stress_period_data = {}
         for index in range(len(times)):
@@ -163,6 +163,7 @@ def make_input(
         head_filerecord=head_file,
         saverecord=[('HEAD', 'ALL'), ('BUDGET', 'ALL')])
     file_extensions.append('oc')
+
     if model_data['transport']:
         file_extensions.append('gwfgwt')
     model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
@@ -170,7 +171,7 @@ def make_input(
     _save_model_file_names(model_path, model_file_names)
     if model_data['transport']:
         make_transport_model(sim, model_data)
-    if model_data['river']:
+    if model_data['river_active']:
         make_river(model_data=model_data, gwf=gwf, file_extensions=file_extensions)
     sim.write_simulation()
 
@@ -258,10 +259,12 @@ def make_transport_model(sim, model_data):
 
     # Instantiating MODFLOW 6 transport source-sink mixing package
     sourcerecarray = [
-        ('WEL-1', 'AUX', 'CONCENTRATION'),
-        ('CHD-1', 'AUX', 'CONCENTRATION'), 
-        ('RIV-1', 'AUX', 'CONCENTRATION')
-        ]
+        ('CHD-1', 'AUX', 'CONCENTRATION'),
+    ]
+
+    if model_data['wells_active']: 
+        sourcerecarray.append(('WEL-1', 'AUX', 'CONCENTRATION'))
+
     flopy.mf6.ModflowGwtssm(
         gwt, sources=sourcerecarray, filename=f'{gwtname}.ssm'
     )
