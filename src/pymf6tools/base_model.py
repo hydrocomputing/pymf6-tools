@@ -53,6 +53,7 @@ BASE_MODEL_DATA = {
 }         
 
 BASE_TRANSPORT_MODEL_DATA = {
+    'wells':{},
     'initial_concentration': 1,
     'cnc': [
         [(0, 5, 1), 10.], # cell_id, conc (const)
@@ -72,7 +73,6 @@ BASE_TRANSPORT_MODEL_DATA = {
 NRIV = 7 
 
 BASE_RIVER_MODEL_DATA = {
-    'wells': {},
     'river_spd': { 
         'rivlay': [0] * NRIV,
         'rivrow': [2, 3, 4, 4, 5, 6, 7],
@@ -114,11 +114,11 @@ def make_model_data(
     base_transport_model_data=deepcopy(base_transport_model_data)
     base_well_model_data=deepcopy(base_well_model_data)
     
-    if specific_model_data.get('transport'):
+    if specific_model_data['transport']:
         base_model_data.update(base_transport_model_data)
-    if specific_model_data.get('river'):
+    if specific_model_data['river_active']:
         base_model_data.update(base_river_model_data)
-    if specific_model_data.get('wells'):
+    if specific_model_data['wells_active']:
         base_model_data.update(base_well_model_data)
     # old way up to Python 3.8
     if sys.version_info[:2] < (3, 9):
