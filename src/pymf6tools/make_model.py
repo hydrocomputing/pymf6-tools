@@ -355,8 +355,8 @@ def make_river( model_data, file_extensions, gwf):
                 riv['rivrow'][counter], 
                 riv['rivcol'][counter], 
                 riv['rivstg'][counter], 
-                riv['rivbot'][counter], 
-                riv['rivcnd'][counter]])
+                riv['rivcnd'][counter], 
+                riv['rivbot'][counter]])
     riv_kwargs = {}
     riv_kwargs.update({'pname':'RIV-1'})
     flopy.mf6.ModflowGwfriv(
