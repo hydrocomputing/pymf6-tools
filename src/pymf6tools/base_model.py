@@ -70,13 +70,13 @@ BASE_TRANSPORT_MODEL_DATA = {
     ],
 }
 
-NRIV = 7 
+NRIV = 12 
 
 BASE_RIVER_MODEL_DATA = {
     'river_spd': { 
         'rivlay': [0] * NRIV,
-        'rivrow': [2, 3, 4, 4, 5, 6, 7],
-        'rivcol': [1, 2, 3, 4, 5, 6, 7],
+        'rivrow': [1, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 7],
+        'rivcol': [0, 2, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8],
         'rivstg': np.linspace(13, 14, NRIV), 
         'rivbot': np.linspace(7, 10, NRIV), 
         'rivcnd': [0.05] * NRIV  
