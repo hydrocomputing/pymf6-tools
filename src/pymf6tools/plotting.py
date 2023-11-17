@@ -53,6 +53,7 @@ def show_heads(
     return plot
 
 
+
 def show_bcs(
         model_path,
         name,
@@ -187,6 +188,39 @@ def show_well_head(
     ax.legend(loc=(1.1, 0))
     return ax
 
+def contour_well_heads(
+        model_path,
+        name,
+        title='',
+        show_wells=True):
+    """Plot calculated heads with contour in the vector field."""
+    sim = get_simulation(model_path, name)
+    gwf = sim.get_model(name)
+
+    head = gwf.output.head().get_data(kstpkper=(119, 2))
+    bud = gwf.output.budget()
+    spdis = bud.get_data(text='DATA-SPDIS')[240]
+    qx, qy, _ = get_specific_discharge(spdis, gwf)
+    pmv = flopy.plot.PlotMapView(gwf)
+    pmv.plot_ibound()
+    contour_set = pmv.contour_array(head)
+    pmv.plot_grid()
+
+    if show_wells:
+        pmv.plot_bc(name="WEL", plotAll=True, kper=1)
+    plot = pmv.plot_vector(
+        qx,
+        qy,
+        normalize=True,
+        color="grey")
+    plot.axes.set_xlabel('x (m)')
+    plot.axes.set_ylabel('y (m)')
+    plot.axes.set_title(title)
+    cbar = plot.get_figure().colorbar(contour_set) # ticks=ticks)
+    cbar.set_label('Groundwater level (m)')
+    return plot
+
+
 def show_bot_elevations( 
         model_path, 
         model_name, 
@@ -223,11 +257,13 @@ def show_bot_elevations(
 
     return pmv
 
-
-def show_river_stages( 
+def contour_bot_elevations( 
         model_path, 
         model_name, 
-        layer):
+        max_top, 
+        max_botm,
+        layer 
+        ):
     """Plot model bottom elevations"""
     sim = get_simulation(model_path, model_name)
     ml = sim.get_model(model_name)
@@ -237,13 +273,76 @@ def show_river_stages(
     #extract first stress period array 
     riv1 = riv.stress_period_data.array[0]
     #extracting botm array from discretization package 
+    array = dis.botm.array[0]
+    # get the data from the bottom elevations for respective coordinates of river 
+    for entry in riv1:
+        coordinate = entry['cellid'][layer:]
+        array[coordinate] = entry['rbot'] 
+    
+    fig = plt.figure(figsize=(5,5))
+    ax = fig.add_subplot(1, 1, 1, aspect="equal")
+    ax.set_title("Model Contour Bottom Elevation ")
+    pmv = flopy.plot.PlotMapView(model=ml, layer=layer)
+    botm_arr = pmv.contour_array(array)
+    pmv.plot_grid()
+    pmv.ax.set_xlabel('x (m)')
+    pmv.ax.set_ylabel('y (m)')
+    pmv.ax.set_title(str(layer) + ' layer - model bottoms')
+    
+    ticks = np.arange(max_botm, max_top, 0.5)
+    #plot color bar 
+    cbar = fig.colorbar(botm_arr)
+    cbar.set_label('m')
+
+    return pmv
+
+def plot_spec_discharge(
+        model_path,
+        model_name, 
+        layer,
+        times 
+            ):
+    """Plot model specific discharge to the respective layer."""
+    sim = get_simulation(model_path, model_name)
+    ml = sim.get_model(model_name)
+
+    spdis = ml.output.budget().get_data(text="SPDIS")[times]
+    head = ml.output.head().get_alldata()[0]
+    qx, qy, _ = get_specific_discharge(spdis, ml)
+
+    pmv = flopy.plot.PlotMapView(model=ml, layer=layer)
+    pmv.plot_grid
+    quadmesh = pmv.plot_array(head, alpha=0.5)
+    pmv.plot_vector(qx, qy)
+    pmv.plot_inactive()
+
+    plt.title("Specific discharge layer " + str(layer))
+    plt.colorbar(quadmesh)
+    
+    return pmv 
+    
+
+def show_river_stages( 
+        model_path, 
+        model_name, 
+        layer, 
+        time_period):
+    """Plot model bottom elevations"""
+    sim = get_simulation(model_path, model_name)
+    ml = sim.get_model(model_name)
+    #get packages of the model 
+    dis = ml.get_package('dis')
+    riv = ml.get_package('riv')
+    #extract first stress period array 
+    riv1 = riv.stress_period_data.array[time_period]
+    #extracting botm array from discretization package 
     array = dis.top.array
     # get the data from the bottom elevations for respective coordinates of river 
     for entry in riv1:
         coordinate = entry['cellid'][layer:]
         array[coordinate] = entry['stage'] 
     
-    pmv = flopy.plot.PlotMapView(model=ml, layer=0)
+    pmv = flopy.plot.PlotMapView(model=ml, layer=layer)
     botm_arr = pmv.plot_array(array)
     pmv.plot_grid()
     pmv.ax.set_xlabel('x (m)')
@@ -258,7 +357,45 @@ def show_river_stages(
     return pmv
 
 
+# def plot_river_stages( 
+#         model_path, 
+#         model_name, 
+#         layer, 
+#         time_period):
+#     """Plot model bottom elevations"""
+#     sim = get_simulation(model_path, model_name)
+#     ml = sim.get_model(model_name)
+#     #get packages of the model 
+#     riv = ml.get_package('riv')
+#     #extract first stress period array 
+#     riv1 = riv.stress_period_data.array[time_period]
+#     #extracting botm array from discretization package 
+#     riv.
 
+#     _, ax = plt.subplots()
+#     ax.plot(heads[:, 0], heads[:, 1], label='Well water level')
+#     ax.set_xlabel('Time (d)')
+#     ax.set_ylabel('Groundwater level (m)')
+#     y_stress = (y_start, y_end)
+#     x_stress_1 = (1, 1)
+#     times_diff = times[0]
+#     x_stresses = []
+#     for count in range(1, len(times)):
+#         start = count * times_diff + 1
+#         x_stresses.append((start, start))
+#         x_stresses.append(y_stress)
+#     ax.set_xlim(*x)
+#     ax.set_ylim(y_start, y_end)
+#     ax.set_title(title)
+#     limit_range = False
+#     one_limit = False
+    
+#     #ticks = np.arange(min(array), max(riv1), 0.5)
+#     #plot color bar 
+#     cbar = botm_arr.get_figure().colorbar(botm_arr)
+#     cbar.set_label('m')
+
+#     return pmv
 
 
 
