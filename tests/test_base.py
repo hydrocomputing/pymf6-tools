@@ -44,11 +44,11 @@ def test_base_transport():
     do_test(specific_model_data, model_path)
 
 def test_base_river():
-    model_path = get_full_model_path('river_base')
+    model_path = get_full_model_path('riverbase')
     specific_model_data = {
         'model_path': model_path,
         'name': 'riverbase',
-        'transport': False,
+        'transport': True,
         'river_active': True, 
         'wells_active': False,
         }
@@ -62,7 +62,6 @@ def test_base_transport_river():
         'transport': True,
         'river_active': True, 
         'wells_active': True,
-
         }
     do_test(specific_model_data, model_path)
 
