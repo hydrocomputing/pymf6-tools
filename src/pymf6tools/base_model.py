@@ -37,8 +37,8 @@ BASE_MODEL_DATA = {
     'top': 15.0,
     'botm': [-5.0, -10.0, -15.0],
     #  flopy.mf6.ModflowGwfnpf
-    'k': [0.5, 0.6, 0.5],  # initial value of k
-    'k33': [0.1, 0.2, 0.3],  # vertical anisotropy
+    'k': [0.5, 0.000006, 0.5],  # initial value of k
+    'k33': [0.1, 0.002, 0.3],  # vertical anisotropy
     #  flopy.mf6.ModflowGwfsto
     'sy': 0.2,
     'ss': 0.000001,
@@ -56,7 +56,8 @@ BASE_TRANSPORT_MODEL_DATA = {
     'wells':{},
     'initial_concentration': 1,
     'cnc': [
-        [(0, 5, 1), 10.], # cell_id, conc (const)
+        [(0, 5, 1), 10.],
+        [(0, 6, 1), 10.] # cell_id, conc (const)
     ],
     'scheme': 'UPSTREAM', #'TVD',  # or 'UPSTREAM'
     'longitudinal_dispersivity': 1.0,
@@ -91,6 +92,8 @@ BASE_RIVER_MODEL_DATA = {
 BASE_WELL_MODEL_DATA = {
     'wells': {
         'wel_out': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 4, 4)},
+        'wel_out1': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 6, 4)},
+        'wel_out2': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 8, 4)},
               },
 
 }
