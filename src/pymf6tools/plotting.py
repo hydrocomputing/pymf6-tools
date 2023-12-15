@@ -102,10 +102,13 @@ def show_concentration(
     arr = pmv.plot_array(conc, vmin=vmin, vmax=vmax)
     if show_grid:
         pmv.plot_grid(colors='white')
+
+    flow_sim = get_simulation(model_path, name)
+    gwf = flow_sim.get_model(name)
     if show_wells:
-        flow_sim = get_simulation(model_path, name)
-        gwf = flow_sim.get_model(name)
         plot = pmv.plot_bc(package=gwf.get_package('wel'), plotAll=True, kper=1)
+    else:
+        plot = pmv.plot_bc(package=gwf.get_package('riv-1'), plotAll=True, kper=1)
     if show_contours:
         pmv.contour_array(
             conc,
@@ -143,17 +146,19 @@ def show_well_head(
     """Plot head at well over time."""
     sim = get_simulation(model_path, model_name)
     gwf = sim.get_model(model_name)
+    ml = sim.get_model(model_name)
     print(gwf.output)
     heads = gwf.output.head().get_ts(wel_coords)
+    time = ml.output.budget().get_data(text="SPDIS")[times]
     _, ax = plt.subplots()
     ax.plot(heads[:, 0], heads[:, 1], label='Well water level')
     ax.set_xlabel('Time (d)')
     ax.set_ylabel('Groundwater level (m)')
     y_stress = (y_start, y_end)
     x_stress_1 = (1, 1)
-    times_diff = times[0]
+    times_diff = time[0]
     x_stresses = []
-    for count in range(1, len(times)):
+    for count in range(1, len(time)):
         start = count * times_diff + 1
         x_stresses.append((start, start))
         x_stresses.append(y_stress)
