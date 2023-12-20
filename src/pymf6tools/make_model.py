@@ -3,6 +3,7 @@
 
 from pathlib import Path
 import shutil
+from itertools import zip_longest 
 
 import flopy
 
@@ -53,6 +54,8 @@ def make_input(
     repeat_times = model_data['repeat_times']
     tdis_rc = [(1.0, 1, 1.0)] + [times] * repeat_times
     pname = 'tdis'
+    
+    # Instantiating time discretization package 
     flopy.mf6.ModflowTdis(
         sim, pname=pname,
         time_units=model_data['time_units'],
@@ -72,8 +75,12 @@ def make_input(
                   }
     #im_kwargs['lenuni'] = model_data['length_units']
     model_data['dim_kwargs'] = dim_kwargs
+
+    # Instantiating spatial discretization package 
     flopy.mf6.ModflowGwfdis(gwf, **dim_kwargs)
     file_extensions.append('dis')
+
+    # Instantiating initial conditions package
     flopy.mf6.ModflowGwfic(gwf, strt=model_data['initial_head'])
     file_extensions.append('ic')
     flopy.mf6.ModflowGwfnpf(
@@ -93,6 +100,8 @@ def make_input(
         gwf, default_value=model_data['ss']
     )
     pname = 'sto'
+
+    # Instantiating storage package 
     flopy.mf6.ModflowGwfsto(
         gwf,
         pname=pname,
@@ -105,52 +114,56 @@ def make_input(
         )
     file_extensions.append(pname)
 
-    stress_period_data = {}
-    for index in range(len(times)):
-        entry = []
-        for well in model_data['wells'].values():
-            value = [well['coords'], well['q'][index]]
-            if model_data['transport']:
-                value.append(0)
-            entry.append(tuple(value))
-        stress_period_data[index + 1] = entry
-    wel_kwargs = {}
-    if model_data['transport']:
-        wel_kwargs.update({
-            'auxiliary': 'CONCENTRATION',
-            'pname': 'WEL-1'})
-    flopy.mf6.ModflowGwfwel(
-        gwf,
-        stress_period_data=stress_period_data,
-        **wel_kwargs,
-    )
-    file_extensions.append('wel')
+    if model_data['wells_active']: 
+        # Stress period data for the well 
+        stress_period_data = {}
+        for index in range(len(times)):
+            entry = []
+            for well in model_data['wells'].values():
+                value = [well['coords'], well['q'][index]]
+                if model_data['transport']:
+                    value.append(0)
+                entry.append(tuple(value))
+            stress_period_data[index + 1] = entry
+        wel_kwargs = {}
+        if model_data['transport']:
+            wel_kwargs.update({
+                'auxiliary': 'CONCENTRATION',
+                'pname': 'WEL-1'})
+        # Instantiating well package 
+        flopy.mf6.ModflowGwfwel(
+            gwf,
+            stress_period_data=stress_period_data,
+            **wel_kwargs,
+        )
+        file_extensions.append('wel')
+
     chd_kwargs = {}
     if model_data['transport']:
         chd_kwargs.update({
             'auxiliary': 'CONCENTRATION',
             'pname': 'CHD-1'})
+        
+    # Instantiating constant head package
     flopy.mf6.ModflowGwfchd(
-        gwf,
-        stress_period_data=model_data['chd'],
-        **chd_kwargs
-    )
+    gwf,
+    stress_period_data=model_data['chd'],
+    **chd_kwargs
+    ) 
+
     file_extensions.append('chd')
-    if model_data['rivers']:
-        flopy.mf6.ModflowGwfriv(
-            gwf,
-            stress_period_data=model_data['rivers'],
-            # **riv_kwargs
-            )
-        file_extensions.append('riv')
+
     budget_file = model_data['name'] + '.bud'
     head_file = model_data['name'] + '.hds'
+
+    # Instantiating output control package
     flopy.mf6.ModflowGwfoc(
         gwf,
         budget_filerecord=budget_file,
         head_filerecord=head_file,
         saverecord=[('HEAD', 'ALL'), ('BUDGET', 'ALL')])
     file_extensions.append('oc')
+
     if model_data['transport']:
         file_extensions.append('gwfgwt')
     model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
@@ -158,6 +171,8 @@ def make_input(
     _save_model_file_names(model_path, model_file_names)
     if model_data['transport']:
         make_transport_model(sim, model_data)
+    if model_data['river_active']:
+        make_river(model_data=model_data, gwf=gwf, file_extensions=file_extensions)
     sim.write_simulation()
 
 
@@ -244,9 +259,12 @@ def make_transport_model(sim, model_data):
 
     # Instantiating MODFLOW 6 transport source-sink mixing package
     sourcerecarray = [
-        ('WEL-1', 'AUX', 'CONCENTRATION'),
-        ('CHD-1', 'AUX', 'CONCENTRATION')
-        ]
+        ('CHD-1', 'AUX', 'CONCENTRATION'),
+    ]
+
+    if model_data['wells_active']: 
+        sourcerecarray.append(('WEL-1', 'AUX', 'CONCENTRATION'))
+
     flopy.mf6.ModflowGwtssm(
         gwt, sources=sourcerecarray, filename=f'{gwtname}.ssm'
     )
@@ -327,3 +345,30 @@ def clone_model(src, dst=None, config=CONFIG):
     model_files = model_files_path.read_text().split('\n')
     for file_name in model_files:
         shutil.copy(src / file_name, dst / file_name)
+
+def make_river( model_data, file_extensions, gwf):
+    entry = []
+    riv = model_data['river_spd']
+    for counter in range(len(riv['rivlay'])): 
+            entry.append([
+                riv['rivlay'][counter], 
+                riv['rivrow'][counter], 
+                riv['rivcol'][counter], 
+                riv['rivstg'][counter], 
+                riv['rivcnd'][counter], 
+                riv['rivbot'][counter]])
+    riv_kwargs = {}
+    riv_kwargs.update({'pname':'RIV-1'})
+    flopy.mf6.ModflowGwfriv(
+            gwf,
+            stress_period_data=entry,
+            #boundnames=model_data['river_boundnames'], # boolean to indicate that boundary names may be in river list cells
+            #observations= model_data['obs_dict'], # dictionary or data containing data for the observation package
+           # timeseries= model_data['tsdict'], # dictionary or data for the time-series 
+            **riv_kwargs
+            )
+    file_extensions.append('riv')
+    model_path=model_data['model_path']
+    gwfname=model_data['name']
+    model_file_names = set(f'{gwfname}.{ext}' for ext in file_extensions)
+    _save_model_file_names(model_path, model_file_names, append=True)
