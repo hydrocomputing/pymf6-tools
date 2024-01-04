@@ -3,7 +3,7 @@
 
 from pathlib import Path
 import shutil
-from itertools import zip_longest 
+from itertools import zip_longest
 
 import flopy
 
@@ -54,8 +54,8 @@ def make_input(
     repeat_times = model_data['repeat_times']
     tdis_rc = [(1.0, 1, 1.0)] + [times] * repeat_times
     pname = 'tdis'
-    
-    # Instantiating time discretization package 
+
+    # Instantiating time discretization package
     flopy.mf6.ModflowTdis(
         sim, pname=pname,
         time_units=model_data['time_units'],
@@ -76,7 +76,7 @@ def make_input(
     #im_kwargs['lenuni'] = model_data['length_units']
     model_data['dim_kwargs'] = dim_kwargs
 
-    # Instantiating spatial discretization package 
+    # Instantiating spatial discretization package
     flopy.mf6.ModflowGwfdis(gwf, **dim_kwargs)
     file_extensions.append('dis')
 
@@ -101,7 +101,7 @@ def make_input(
     )
     pname = 'sto'
 
-    # Instantiating storage package 
+    # Instantiating storage package
     flopy.mf6.ModflowGwfsto(
         gwf,
         pname=pname,
@@ -114,8 +114,8 @@ def make_input(
         )
     file_extensions.append(pname)
 
-    if model_data['wells_active']: 
-        # Stress period data for the well 
+    if model_data['wells_active']:
+        # Stress period data for the well
         stress_period_data = {}
         for index in range(len(times)):
             entry = []
@@ -130,7 +130,7 @@ def make_input(
             wel_kwargs.update({
                 'auxiliary': 'CONCENTRATION',
                 'pname': 'WEL-1'})
-        # Instantiating well package 
+        # Instantiating well package
         flopy.mf6.ModflowGwfwel(
             gwf,
             stress_period_data=stress_period_data,
@@ -143,13 +143,13 @@ def make_input(
         chd_kwargs.update({
             'auxiliary': 'CONCENTRATION',
             'pname': 'CHD-1'})
-        
+
     # Instantiating constant head package
     flopy.mf6.ModflowGwfchd(
     gwf,
     stress_period_data=model_data['chd'],
     **chd_kwargs
-    ) 
+    )
 
     file_extensions.append('chd')
 
@@ -262,7 +262,7 @@ def make_transport_model(sim, model_data):
         ('CHD-1', 'AUX', 'CONCENTRATION'),
     ]
 
-    if model_data['wells_active']: 
+    if model_data['wells_active']:
         sourcerecarray.append(('WEL-1', 'AUX', 'CONCENTRATION'))
 
     flopy.mf6.ModflowGwtssm(
@@ -349,13 +349,13 @@ def clone_model(src, dst=None, config=CONFIG):
 def make_river( model_data, file_extensions, gwf):
     entry = []
     riv = model_data['river_spd']
-    for counter in range(len(riv['rivlay'])): 
+    for counter in range(len(riv['rivlay'])):
             entry.append([
-                riv['rivlay'][counter], 
-                riv['rivrow'][counter], 
-                riv['rivcol'][counter], 
-                riv['rivstg'][counter], 
-                riv['rivcnd'][counter], 
+                riv['rivlay'][counter],
+                riv['rivrow'][counter],
+                riv['rivcol'][counter],
+                riv['rivstg'][counter],
+                riv['rivcnd'][counter],
                 riv['rivbot'][counter]])
     riv_kwargs = {}
     riv_kwargs.update({'pname':'RIV-1'})
@@ -364,7 +364,7 @@ def make_river( model_data, file_extensions, gwf):
             stress_period_data=entry,
             #boundnames=model_data['river_boundnames'], # boolean to indicate that boundary names may be in river list cells
             #observations= model_data['obs_dict'], # dictionary or data containing data for the observation package
-           # timeseries= model_data['tsdict'], # dictionary or data for the time-series 
+           # timeseries= model_data['tsdict'], # dictionary or data for the time-series
             **riv_kwargs
             )
     file_extensions.append('riv')
