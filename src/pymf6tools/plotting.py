@@ -10,7 +10,7 @@ import numpy as np
 import flopy
 from flopy.utils.postprocessing import get_specific_discharge
 
-from pymf6.modeling_tools.make_model import get_simulation
+from pymf6tools.make_model import get_simulation
 
 
 def show_heads(
@@ -196,7 +196,9 @@ def contour_well_heads(
         model_path,
         name,
         title='',
-        show_wells=True):
+        show_wells=True,
+        show_inactive=False,
+        ):
     """Plot calculated heads with contour in the vector field."""
     sim = get_simulation(model_path, name)
     gwf = sim.get_model(name)
@@ -206,7 +208,8 @@ def contour_well_heads(
     spdis = bud.get_data(text='DATA-SPDIS')[240]
     qx, qy, _ = get_specific_discharge(spdis, gwf)
     pmv = flopy.plot.PlotMapView(gwf)
-    pmv.plot_ibound()
+    if show_inactive:
+        pmv.plot_ibound()
     contour_set = pmv.contour_array(head)
     pmv.plot_grid()
 
@@ -304,12 +307,12 @@ def plot_spec_discharge(
         model_path,
         model_name,
         layer,
-        times
-            ):
+        times,
+        show_inactive=False,
+        ):
     """Plot model specific discharge to the respective layer."""
     sim = get_simulation(model_path, model_name)
     ml = sim.get_model(model_name)
-
     spdis = ml.output.budget().get_data(text="SPDIS")[times]
     head = ml.output.head().get_alldata()[0]
     qx, qy, _ = get_specific_discharge(spdis, ml)
@@ -318,7 +321,8 @@ def plot_spec_discharge(
     pmv.plot_grid
     quadmesh = pmv.plot_array(head, alpha=0.5)
     pmv.plot_vector(qx, qy)
-    pmv.plot_inactive()
+    if show_inactive:
+        pmv.plot_inactive()
 
     plt.title("Specific discharge layer " + str(layer))
     plt.colorbar(quadmesh)
