@@ -29,8 +29,8 @@ BASE_MODEL_DATA = {
     'length_units': 'meters',
     'repeat_times': 3,  # nper = repeat_times + 1
     #  flopy.mf6.ModflowGwfdis
-    'nrow': 10,
-    'ncol': 15,
+    'nrow': 15,
+    'ncol': 10,
     'nlay': 3,
     'delr': 100.0,
     'delc': 100.0,
@@ -56,7 +56,7 @@ BASE_TRANSPORT_MODEL_DATA = {
     'wells':{},
     'initial_concentration': 1,
     'cnc': [
-        [(0, 4, 4), 10.],
+        [(0, 5, 1), 10.],
         [(0, 6, 1), 10.] # cell_id, conc (const)
     ],
     'scheme': 'UPSTREAM', #'TVD',  # or 'UPSTREAM'
@@ -91,29 +91,19 @@ BASE_RIVER_MODEL_DATA = {
 
 BASE_WELL_MODEL_DATA = {
     'wells': {
-        'wel_out': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 4, 4), 'well_top':(15.0), 'well_botm':(30.0)},
-        'wel_out1': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 6, 4),'well_top':(15.0), 'well_botm':(30.0)},
-        'wel_out2': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 8, 4),'well_top':(15.0), 'well_botm':(30.0)},
+        'wel_out': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 4, 4)},
+        'wel_out1': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 6, 4)},
+        'wel_out2': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 8, 4)},
               },
+
 }
-
-WELLS_EXAMPLE_1 = {
-    'wells': {
-        'wel_out': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 10, 4),'well_top':(15.0), 'well_botm':(30.0)},
-        'wel_out1': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 12, 4),'well_top':(15.0),'well_botm':(50.0)},
-        'wel_out2': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 14, 4),'well_top':(15.0), 'well_botm':(60.0)},
-    }
-}
-
-
 
 def make_model_data(
         specific_model_data,
         base_model_data=BASE_MODEL_DATA,
         base_transport_model_data=BASE_TRANSPORT_MODEL_DATA,
         base_river_model_data=BASE_RIVER_MODEL_DATA, 
-        base_well_model_data=BASE_WELL_MODEL_DATA, 
-        wells_example_1=WELLS_EXAMPLE_1):
+        base_well_model_data=BASE_WELL_MODEL_DATA  ):
     """Make model data.
 
     specific_model_data - dictionary with data specific for the current model
@@ -126,7 +116,6 @@ def make_model_data(
     base_river_model_data=deepcopy(base_river_model_data)
     base_transport_model_data=deepcopy(base_transport_model_data)
     base_well_model_data=deepcopy(base_well_model_data)
-    wells_example_1=deepcopy(wells_example_1)
     
     if specific_model_data['transport']:
         base_model_data.update(base_transport_model_data)
@@ -134,8 +123,6 @@ def make_model_data(
         base_model_data.update(base_river_model_data)
     if specific_model_data['wells_active']:
         base_model_data.update(base_well_model_data)
-    if specific_model_data['wells_example_1']:
-        base_model_data.update(wells_example_1)
     # old way up to Python 3.8
     if sys.version_info[:2] < (3, 9):
         return {**base_model_data, **specific_model_data}

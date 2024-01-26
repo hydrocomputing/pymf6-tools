@@ -108,7 +108,6 @@ def show_concentration(
     if show_wells:
         plot = pmv.plot_bc(package=gwf.get_package('wel'), plotAll=True, kper=1)
     else:
-        
         plot = pmv.plot_bc(package=gwf.get_package('riv-1'), plotAll=True, kper=1)
     if show_contours:
         pmv.contour_array(

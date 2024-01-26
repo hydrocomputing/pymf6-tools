@@ -29,7 +29,6 @@ def test_base_flow():
         'transport': False,
         'river_active': False,
         'wells_active': False,
-        'wells_example_1':False,
         }
     do_test(specific_model_data, model_path)
 
@@ -41,7 +40,6 @@ def test_base_transport():
         'transport': True,
         'river_active': False, 
         'wells_active': True,
-        'wells_example_1':False,
         }
     do_test(specific_model_data, model_path)
 
@@ -53,7 +51,6 @@ def test_base_river():
         'transport': True,
         'river_active': True, 
         'wells_active': False,
-        'wells_example_1':False,
         }
     do_test(specific_model_data, model_path)
 
@@ -65,19 +62,6 @@ def test_base_transport_river():
         'transport': True,
         'river_active': True, 
         'wells_active': True,
-        'wells_example_1':False,
         }
-    do_test(specific_model_data, model_path)
-
-def test_example_1():
-    model_path = get_full_model_path('example_1')
-    specific_model_data = {
-        'model_path': model_path, 
-        'name': 'example_1', 
-        'transport': False, 
-        'river_active': True, 
-        'wells_active': False,
-        'wells_example_1':True,
-    }
     do_test(specific_model_data, model_path)
 
