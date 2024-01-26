@@ -114,13 +114,37 @@ def make_input(
         )
     file_extensions.append(pname)
 
+    # if model_data['wells_example_1']: 
+    #     # Stress period data for the well 
+    #     stress_period_data = {}
+    #     for index in range(len(times)):
+    #         entry = []
+    #         for well in model_data['wells'].values():
+    #             value = [well['coords'], well['q'][index], well['well_top'], well['well_botm']]
+    #             if model_data['transport']:
+    #                 value.append(0)
+    #             entry.append(tuple(value))
+    #         stress_period_data[index + 1] = entry
+    #     wel_kwargs = {}
+    #     if model_data['transport']:
+    #         wel_kwargs.update({
+    #             'auxiliary': 'CONCENTRATION',
+    #             'pname': 'WEL-1'})
+    #     # Instantiating well package 
+    #     flopy.mf6.ModflowGwfwel(
+    #         gwf,
+    #         stress_period_data=stress_period_data,
+    #         **wel_kwargs,
+    #     )
+    # file_extensions.append('wel')
+    
     if model_data['wells_active']: 
         # Stress period data for the well 
         stress_period_data = {}
         for index in range(len(times)):
             entry = []
             for well in model_data['wells'].values():
-                value = [well['coords'], well['q'][index]]
+                value = [well['coords'], well['q'][index], well['well_top'], well['well_botm']]
                 if model_data['transport']:
                     value.append(0)
                 entry.append(tuple(value))
@@ -136,7 +160,7 @@ def make_input(
             stress_period_data=stress_period_data,
             **wel_kwargs,
         )
-        file_extensions.append('wel')
+    file_extensions.append('wel')
 
     chd_kwargs = {}
     if model_data['transport']:
