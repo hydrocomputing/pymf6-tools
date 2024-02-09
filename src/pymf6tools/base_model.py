@@ -29,11 +29,11 @@ BASE_MODEL_DATA = {
     'length_units': 'meters',
     'repeat_times': 3,  # nper = repeat_times + 1
     #  flopy.mf6.ModflowGwfdis
-    'nrow': 15,
-    'ncol': 10,
+    'nrow': 30,
+    'ncol': 20,
     'nlay': 3,
-    'delr': 100.0,
-    'delc': 100.0,
+    'delr': 5.0,
+    'delc': 5.0,
     'top': 15.0,
     'botm': [-5.0, -10.0, -15.0],
     #  flopy.mf6.ModflowGwfnpf
@@ -46,7 +46,7 @@ BASE_MODEL_DATA = {
     # flopy.mf6.ModflowGwfchd(
     'chd': [
         [(0, 0, 0), 10.], 
-        [(0, 14, 9), 10.]
+        [(0, 29, 19), 10.]
     ],
     'transport': False,
     'river': False,
@@ -67,17 +67,17 @@ BASE_TRANSPORT_MODEL_DATA = {
     'obs': None,
     'chd': [
         [(0, 0, 0), 10.0, 10.0],
-        [(0, 14, 9), 10.0, 10.0]
+        [(0, 29, 19), 10.0, 10.0]
     ],
 }
 
-NRIV = 12 
+NRIV = 24
 
 BASE_RIVER_MODEL_DATA = {
     'river_spd': { 
         'rivlay': [0] * NRIV,
-        'rivrow': [1, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 7],
-        'rivcol': [0, 2, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8],
+        'rivrow': [1, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 7, 8, 9, 9, 9, 11, 11, 11, 12, 12, 13, 11, 10],
+        'rivcol': [0, 2, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 9, 9, 10, 11, 13, 12, 12, 13, 11, 11, 11, 10],
         'rivstg': np.linspace(13, 14, NRIV), 
         'rivbot': np.linspace(7, 10, NRIV), 
         'rivcnd': [0.05] * NRIV  
@@ -98,12 +98,27 @@ BASE_WELL_MODEL_DATA = {
 
 }
 
+EXAMPLE_1_DATA = {
+    'wells': {
+        'wel_out': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 8, 4)},
+        'wel_out1': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 13, 8)},
+        'wel_out2': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 3, 9)},
+        'wel_out3': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 9, 9)},
+        'wel_out4': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 12, 7)},
+        'wel_out5': {'q': (-0.05, -0.5, -0.05), 'coords': (0, 3, 4)},
+              },
+
+}
+
 def make_model_data(
         specific_model_data,
         base_model_data=BASE_MODEL_DATA,
         base_transport_model_data=BASE_TRANSPORT_MODEL_DATA,
         base_river_model_data=BASE_RIVER_MODEL_DATA, 
-        base_well_model_data=BASE_WELL_MODEL_DATA  ):
+        base_well_model_data=BASE_WELL_MODEL_DATA, 
+        example_1_data=EXAMPLE_1_DATA
+    ):
+
     """Make model data.
 
     specific_model_data - dictionary with data specific for the current model
@@ -116,6 +131,7 @@ def make_model_data(
     base_river_model_data=deepcopy(base_river_model_data)
     base_transport_model_data=deepcopy(base_transport_model_data)
     base_well_model_data=deepcopy(base_well_model_data)
+    example_1_data=deepcopy(example_1_data)
     
     if specific_model_data['transport']:
         base_model_data.update(base_transport_model_data)
@@ -123,6 +139,9 @@ def make_model_data(
         base_model_data.update(base_river_model_data)
     if specific_model_data['wells_active']:
         base_model_data.update(base_well_model_data)
+    if specific_model_data['example_1_data']:
+        base_model_data.update(example_1_data)
+
     # old way up to Python 3.8
     if sys.version_info[:2] < (3, 9):
         return {**base_model_data, **specific_model_data}
