@@ -17,6 +17,33 @@ import numpy as np
 from copy import deepcopy
 
 
+# Function to calculate the constant heads automatically  
+# def add_chd_to_dict(base_model_data):
+#     chd_value_left = base_model_data.get('chd_value_left')
+#     chd_value_right = base_model_data.get('chd_value_right')
+#     # Loop to reproduce the matrix for the CHD package 
+#     chd = []
+#     for col, chd_value in zip([0, base_model_data['ncol']], [chd_value_left, chd_value_right]):
+#         for lay in range(base_model_data['nlay']):
+#             for row in range(0, base_model_data['nrow'] - 1):
+#                 chd.append([(lay, row, col), chd_value])
+#     return chd
+
+# Function to calculate the heads automatically for transport package
+# def add_chd_to_dict_transp(base_transport_model_data, base_model_data):
+#     chd_value_left = base_model_data.get('chd_value_left')
+#     chd_value_right = base_model_data.get('chd_value_right')
+#     cnc_left = base_transport_model_data.get('concentration_source_wall')
+#     cnc_right = 0 
+#     # Loop to reproduce the matrix for the CHD package
+#     chd = []
+#     for col, chd_value, cnc in zip([0, base_model_data['ncol']],
+#                                     [chd_value_left, chd_value_right], 
+#                                     [cnc_left, cnc_right]):
+#         for lay in range(base_model_data['nlay']):
+#             for row in range(0, base_model_data['nrow'] - 1):
+#                 chd.append([(lay, row, col), chd_value, cnc])
+
 BASE_MODEL_DATA = {
     #  flopy.mf6.ModflowTdis
     'times': (
