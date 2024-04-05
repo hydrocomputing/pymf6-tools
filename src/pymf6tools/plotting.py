@@ -16,13 +16,13 @@ from pymf6.modeling_tools.make_model import get_simulation
 
 def show_heads(
         model_path,
-        name,
+        exe_model,
         title='',
         show_grid=True,
         show_wells=True):
     """Plot calculated heads along with flow vector."""
-    sim = get_simulation(model_path, name)
-    gwf = sim.get_model(name)
+    sim = get_simulation(model_path, exe_model)
+    gwf = sim.get_model(exe_model)
 
     head = gwf.output.head().get_data(kstpkper=(119, 2))
     bud = gwf.output.budget()
@@ -53,17 +53,16 @@ def show_heads(
     return plot
 
 
-
 def show_bcs(
         model_path,
-        name,
+        exe_model,
         title='Boundary Conditions',
         bc_names = ('chd', 'wel', 'riv'),
         show_grid=True):
     """Show location of boundary conditions."""
     handles = []
-    sim = get_simulation(model_path, name)
-    gwf = sim.get_model(name)
+    sim = get_simulation(model_path, exe_model)
+    gwf = sim.get_model(exe_model)
     pmv = flopy.plot.PlotMapView(gwf)
 
     def add_bc(name, handles=handles, pmv=pmv):
@@ -82,7 +81,8 @@ def show_bcs(
     return plot
 
 def show_concentration(
-        model_path, name,
+        model_path, 
+        name,
         title='',
         show_grid=True,
         levels=None,
@@ -94,7 +94,8 @@ def show_concentration(
         show_arrows=False,):
     """Plot calculated heads along with flow vector."""
     gwtname = 'gwt_' + name
-    sim = get_simulation(model_path, name)
+    sim = get_simulation(model_path, gwtname)
+    #gwt = sim.get_model(r'C://TUBAF//MODSIMPLE2//pymf6tools//tests//models//example_2//gwt_example2')
     gwt = sim.get_model(gwtname)
 
     conc = gwt.output.concentration().get_data(kstpkper)
@@ -131,11 +132,10 @@ def show_concentration(
             color="white")
     return plot
 
-
 def show_well_head(
         wel_coords,
         model_path,
-        model_name,
+        exe_model,
         times,
         title='',
         y_start=0.3,
@@ -144,9 +144,9 @@ def show_well_head(
         lower_head_limit=None,
         x=(0, 32)):
     """Plot head at well over time."""
-    sim = get_simulation(model_path, model_name)
-    gwf = sim.get_model(model_name)
-    ml = sim.get_model(model_name)
+    sim = get_simulation(model_path, exe_model)
+    gwf = sim.get_model(exe_model)
+    ml = sim.get_model(exe_model)
     print(gwf.output)
     heads = gwf.output.head().get_ts(wel_coords)
     time = ml.output.budget().get_data(text="SPDIS")[times]
@@ -195,12 +195,12 @@ def show_well_head(
 
 def contour_well_heads(
         model_path,
-        name,
+        exe_model,
         title='',
         show_wells=True):
     """Plot calculated heads with contour in the vector field."""
-    sim = get_simulation(model_path, name)
-    gwf = sim.get_model(name)
+    sim = get_simulation(model_path, exe_model)
+    gwf = sim.get_model(exe_model)
 
     head = gwf.output.head().get_data(kstpkper=(119, 2))
     bud = gwf.output.budget()
@@ -228,14 +228,14 @@ def contour_well_heads(
 
 def show_bot_elevations( 
         model_path, 
-        model_name, 
+        exe_model, 
         max_top, 
         max_botm,
         layer 
         ):
     """Plot model bottom elevations"""
-    sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    sim = get_simulation(model_path, exe_model)
+    ml = sim.get_model(exe_model)
     #get packages of the model 
     dis = ml.get_package('dis')
     riv = ml.get_package('riv')
@@ -264,14 +264,14 @@ def show_bot_elevations(
 
 def contour_bot_elevations( 
         model_path, 
-        model_name, 
+        exe_model, 
         max_top, 
         max_botm,
         layer 
         ):
     """Plot model bottom elevations"""
-    sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    sim = get_simulation(model_path, exe_model)
+    ml = sim.get_model(exe_model)
     #get packages of the model 
     dis = ml.get_package('dis')
     riv = ml.get_package('riv')
@@ -303,13 +303,13 @@ def contour_bot_elevations(
 
 def plot_spec_discharge(
         model_path,
-        model_name, 
+        exe_model, 
         layer,
         times 
             ):
     """Plot model specific discharge to the respective layer."""
-    sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    sim = get_simulation(model_path, exe_model)
+    ml = sim.get_model(exe_model)
 
     spdis = ml.output.budget().get_data(text="SPDIS")[times]
     head = ml.output.head().get_alldata()[0]
@@ -329,12 +329,12 @@ def plot_spec_discharge(
 
 def show_river_stages( 
         model_path, 
-        model_name, 
+        exe_model, 
         layer, 
         time_period):
     """Plot model bottom elevations"""
-    sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    sim = get_simulation(model_path, exe_model)
+    ml = sim.get_model(exe_model)
     #get packages of the model 
     dis = ml.get_package('dis')
     riv = ml.get_package('riv')
