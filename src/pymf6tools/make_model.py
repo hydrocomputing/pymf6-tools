@@ -138,6 +138,30 @@ def make_input(
         )
         file_extensions.append('wel')
 
+    if model_data['example_1_data']: 
+        # Stress period data for the well 
+        stress_period_data = {}
+        for index in range(len(times)):
+            entry = []
+            for well in model_data['wells'].values():
+                value = [well['coords'], well['q'][index]]
+                if model_data['transport']:
+                    value.append(0)
+                entry.append(tuple(value))
+            stress_period_data[index + 1] = entry
+        wel_kwargs = {}
+        if model_data['transport']:
+            wel_kwargs.update({
+                'auxiliary': 'CONCENTRATION',
+                'pname': 'WEL-1'})
+        # Instantiating well package 
+        flopy.mf6.ModflowGwfwel(
+            gwf,
+            stress_period_data=stress_period_data,
+            **wel_kwargs,
+        )
+        file_extensions.append('wel')
+
     chd_kwargs = {}
     if model_data['transport']:
         chd_kwargs.update({
@@ -261,8 +285,11 @@ def make_transport_model(sim, model_data):
     sourcerecarray = [
         ('CHD-1', 'AUX', 'CONCENTRATION'),
     ]
-
+    # for the wells active data 
     if model_data['wells_active']: 
+        sourcerecarray.append(('WEL-1', 'AUX', 'CONCENTRATION'))
+    # for the example 1 
+    if model_data['example_1_data']: 
         sourcerecarray.append(('WEL-1', 'AUX', 'CONCENTRATION'))
 
     flopy.mf6.ModflowGwtssm(
