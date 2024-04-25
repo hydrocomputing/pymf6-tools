@@ -30,6 +30,7 @@ def test_base_flow():
         'river_active': False,
         'wells_active': False,
         'example_1_data': False,
+        'example_3_data': False,
         }
     do_test(specific_model_data, model_path)
 
@@ -42,6 +43,7 @@ def test_base_transport():
         'river_active': False, 
         'wells_active': True,
         'example_1_data': False,
+        'example_3_data': False,
         }
     do_test(specific_model_data, model_path)
 
@@ -54,6 +56,7 @@ def test_base_river():
         'river_active': True, 
         'wells_active': True,
         'example_1_data': False,
+        'example_3_data': False,
         }
     do_test(specific_model_data, model_path)
 
@@ -66,6 +69,7 @@ def test_base_transport_river():
         'river_active': True, 
         'wells_active': True,
         'example_1_data': False,
+        'example_3_data': False,
         }
     do_test(specific_model_data, model_path)
 
@@ -73,11 +77,12 @@ def test_example_1():
     model_path = get_full_model_path('example_1')
     specific_model_data = {
         'model_path': model_path,
-        'name': 'example_1',
+        'name': 'example1',
         'transport': False,
         'river_active': True, 
         'wells_active': False,
-        'example_1_data': True, 
+        'example_1_data': True,
+        'example_3_data': False, 
         }
     do_test(specific_model_data, model_path)
 
@@ -89,8 +94,21 @@ def test_example_2():
         'transport': True,
         'river_active': False, 
         'wells_active': True,
-        'example_1_data': False, 
+        'example_1_data': False,
+        'example_3_data': False, 
         }
     do_test(specific_model_data, model_path)
 
+def test_example_3():
+    model_path = get_full_model_path('example_3')
+    specific_model_data = {
+        'model_path': model_path,
+        'name': 'example3',
+        'transport': True,
+        'river_active': True, 
+        'wells_active': True,
+        'example_1_data': False,
+        'example_3_data': True, 
+        }
+    do_test(specific_model_data, model_path)
 

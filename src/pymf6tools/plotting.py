@@ -157,6 +157,7 @@ def show_well_head(
     y_stress = (y_start, y_end)
     x_stress_1 = (1, 1)
     times_diff = time[0]
+    print(times_diff)
     x_stresses = []
     for count in range(1, len(time)):
         start = count * times_diff + 1
@@ -360,6 +361,101 @@ def show_river_stages(
     cbar.set_label('m')
 
     return pmv
+
+def show_well_head_time(
+        wel_coords,
+        model_path,
+        exe_model,
+        times,
+        title='',
+        y_start=0.3,
+        y_end=1.05,
+        upper_head_limit=None,
+        lower_head_limit=None,
+        x=(0, 32)):
+    """Plot head at well over time."""
+    sim = get_simulation(model_path, exe_model)
+    gwf = sim.get_model(exe_model)
+    ml = sim.get_model(exe_model)
+    heads = gwf.output.head().get_ts(wel_coords)
+    time_data = ml.output.budget().get_data(text="SPDIS")[times]
+    time = time_data[:len(heads)]
+    _, ax = plt.subplots()
+    ax.plot(heads[:, 0], heads[:, 1], label='Well water level', marker='.')
+    ax.set_xlabel('Time (d)')
+    ax.set_ylabel('Groundwater level (m)')
+    ax.set_xlim(*x)
+    ax.set_ylim(y_start, y_end)
+    ax.set_title(title)
+    
+    if lower_head_limit is not None:
+        ax.axhline(y=lower_head_limit, color='r', linestyle='--', label='Lower Head Limit')
+    if upper_head_limit is not None:
+        ax.axhline(y=upper_head_limit, color='b', linestyle='--', label='Upper Head Limit')
+    
+    ax.legend()
+    plt.grid(True)
+    plt.show()
+    return ax
+        
+# Back up code show concentrations 
+# def show_concentration(
+#         model_path, 
+#         name, 
+#         exe_model,
+#         title='',
+#         show_grid=True,
+#         levels=None,
+#         kstpkper=None,
+#         show_wells=True,
+#         vmin=None,
+#         vmax=None,
+#         show_contours=True,
+#         show_arrows=False,):
+#     """Plot calculated heads along with flow vector."""
+#     gwtname = 'gwt_' + name
+#     sim = get_simulation(model_path, exe_model)
+#     gwt = sim.get_model(gwtname)
+#     gwf = sim.get_model(exe_model)
+#     ml = sim.get_model(exe_model)
+
+#     conc = gwt.output.concentration().get_data(kstpkper)
+#     pmv = flopy.plot.PlotMapView(gwt)
+#     arr = pmv.plot_array(conc, vmin=vmin, vmax=vmax)
+#     if show_grid:
+#         pmv.plot_grid(colors='white')
+
+#     flow_sim = get_simulation(model_path, name)
+#     gwf = flow_sim.get_model(name)
+#     if show_wells:
+#         plot = pmv.plot_bc(package=gwf.get_package('wel'), plotAll=True, kper=1)
+#     else:
+#         plot = pmv.plot_bc(package=gwf.get_package('riv-1'), plotAll=True, kper=1)
+#     if show_contours:
+#         pmv.contour_array(
+#             conc,
+#             levels=levels,
+#         )
+#     plot.axes.set_xlabel('x (m)')
+#     plot.axes.set_ylabel('y (m)')
+#     plot.axes.set_title(title)
+#     cbar = arr.get_figure().colorbar(arr, ticks=levels)
+#     cbar.set_label('Concentration')
+#     if show_arrows:
+#         gwf = sim.get_model(name)
+#         bud = gwf.output.budget()
+#         spdis = bud.get_data(text='DATA-SPDIS')[240]
+#         qx, qy, _ = get_specific_discharge(spdis, gwf)
+#         plot = pmv.plot_vector(
+#             qx,
+#             qy,
+#             normalize=True,
+#             color="white")
+#     return plot
+
+
+
+
 
 
 # def plot_river_stages( 
