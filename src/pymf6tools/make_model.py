@@ -1,9 +1,7 @@
-"""Create and run a MODFLOW 6 model with flopy.
-"""
+"""Create and run a MODFLOW 6 model with flopy."""
 
 from pathlib import Path
 import shutil
-from itertools import zip_longest
 
 import flopy
 
@@ -14,7 +12,7 @@ CONFIG = {
 
 
 def _get_mf6_exe(exe_name):
-    """Get name of MODFLOW6 executable"""
+    """Get name of MODFLOW6 executable."""
     if exe_name is None:
         # make pymf6 optional to reduce dependencies
         import pymf6  # pylint: disable-msg=import-outside-toplevel
@@ -24,7 +22,7 @@ def _get_mf6_exe(exe_name):
 
 def _save_model_file_names(
         model_path, model_file_names, append=False, config=CONFIG):
-    """Save names of input model files to file"""
+    """Save names of input model files to file."""
     internal = Path(model_path) / config['internal_dir']
     internal.mkdir(exist_ok=True)
     files = internal / config['model_files']
@@ -38,14 +36,14 @@ def make_input(
         model_data,
         exe_name=None,
         verbosity_level=0):
-    """Create MODFLOW 6 input"""
+    """Create MODFLOW 6 input."""
     # pylint: disable-msg=too-many-locals
     exe_name = _get_mf6_exe(exe_name)
     model_path = model_data['model_path']
-    model_name = model_data['name']
+    gwf_name = 'gwf_' + model_data['name']
     file_extensions = ['nam']
     sim = flopy.mf6.MFSimulation(
-        sim_name=model_data['name'],
+        sim_name=gwf_name,
         sim_ws=model_path,
         exe_name=exe_name,
         verbosity_level=verbosity_level,
@@ -63,12 +61,30 @@ def make_input(
         perioddata=tdis_rc,
     )
     file_extensions.append(pname)
-    flopy.mf6.ModflowIms(sim)
+    hclose = model_data.get('hclose_flow', 0.01)
+    nouter = model_data.get('nouter_flow', 50)
+    ninner = model_data.get('ninner_flow', 100)
+    imsgwf = flopy.mf6.ModflowIms(
+        sim,
+        print_option="SUMMARY",
+        outer_dvclose=hclose,
+        outer_maximum=nouter,
+        under_relaxation="DBD",
+        inner_maximum=ninner,
+        inner_dvclose=hclose,
+        # rcloserecord=rclose,
+        linear_acceleration="BICGSTAB",
+        scaling_method="NONE",
+        reordering_method="NONE",
+        # relaxation_factor=relax,
+        filename=f'{gwf_name}.ims'
+    )
+    file_extensions.append('ims')
     gwf = flopy.mf6.ModflowGwf(
         sim,
-        modelname=model_name,
+        modelname=gwf_name,
         save_flows=True)
-    file_extensions.append('ims')
+
     dim_kwargs = {name: model_data[name] for name in
                   ['nrow', 'ncol', 'nlay', 'delr', 'delc', 'top', 'botm',
                    'length_units']
@@ -110,14 +126,14 @@ def make_input(
         ss=ss,
         sy=sy,
         steady_state={0: True},
-        transient={index: True for index in range(1, len(times))},
+        transient={index: True for index in range(1, repeat_times + 1)},
         )
     file_extensions.append(pname)
 
     if model_data['wells_active']:
         # Stress period data for the well
         stress_period_data = {}
-        for index in range(len(times)):
+        for index in range(repeat_times):
             entry = []
             for well in model_data['wells'].values():
                 value = [well['coords'], well['q'][index]]
@@ -153,20 +169,27 @@ def make_input(
 
     file_extensions.append('chd')
 
-    budget_file = model_data['name'] + '.bud'
-    head_file = model_data['name'] + '.hds'
+    budget_file = gwf_name + '.bud'
+    head_file = gwf_name + '.hds'
+    gwf_oc_head = model_data.get('gwf_oc_head', 'ALL')
+    gwf_oc_budget = model_data.get('gwf_oc_budget', 'ALL')
+
 
     # Instantiating output control package
     flopy.mf6.ModflowGwfoc(
         gwf,
         budget_filerecord=budget_file,
         head_filerecord=head_file,
-        saverecord=[('HEAD', 'ALL'), ('BUDGET', 'ALL')])
+        saverecord=[
+            ('BUDGET', gwf_oc_budget),
+            ('HEAD', gwf_oc_head),
+
+            ])
     file_extensions.append('oc')
 
     if model_data['transport']:
         file_extensions.append('gwfgwt')
-    model_file_names = set(f'{model_name}.{ext}' for ext in file_extensions)
+    model_file_names = set(f'{gwf_name}.{ext}' for ext in file_extensions)
     model_file_names.add('mfsim.nam')
     _save_model_file_names(model_path, model_file_names)
     if model_data['transport']:
@@ -177,7 +200,7 @@ def make_input(
 
 
 def make_transport_model(sim, model_data):
-    """Create MODFLOW 6 input for transport model"""
+    """Create MODFLOW 6 input for transport model."""
     # Instantiating MODFLOW 6 groundwater transport package
     model_path = model_data['model_path']
     gwtname = 'gwt_' + model_data['name']
@@ -191,14 +214,17 @@ def make_transport_model(sim, model_data):
     gwt.name_file.save_flows = True
 
     # create iterative model solution and register the gwt model with it
+    hclose = model_data.get('hclose_transport', 0.01)
+    nouter = model_data.get('nouter_transport', 50)
+    ninner = model_data.get('ninner_transport', 100)
     imsgwt = flopy.mf6.ModflowIms(
         sim,
         print_option="SUMMARY",
-        # outer_dvclose=hclose,
-        # outer_maximum=nouter,
-        under_relaxation="NONE",
-        # inner_maximum=ninner,
-        # inner_dvclose=hclose,
+        outer_dvclose=hclose,
+        outer_maximum=nouter,
+        under_relaxation="DBD",
+        inner_maximum=ninner,
+        inner_dvclose=hclose,
         # rcloserecord=rclose,
         linear_acceleration="BICGSTAB",
         scaling_method="NONE",
@@ -276,6 +302,10 @@ def make_transport_model(sim, model_data):
         )
         file_extensions.append('cnc')
     # Instantiating MODFLOW 6 transport output control package
+    gwt_oc_conc = model_data.get('gwt_oc_conc,' 'ALL')
+    gwt_oc_budget = model_data.get('gwt_oc_budget', 'ALL')
+    gwt_oc_budget = 'ALL'
+    gwt_oc_conc = 'ALL'
     flopy.mf6.ModflowGwtoc(
         gwt,
         budget_filerecord=f'{gwtname}.cbc',
@@ -283,8 +313,8 @@ def make_transport_model(sim, model_data):
         concentrationprintrecord=[
             ('COLUMNS', 10, 'WIDTH', 15, 'DIGITS', 6, 'GENERAL')
         ],
-        saverecord=[('CONCENTRATION', 'LAST'), ('BUDGET', 'LAST')],
-        printrecord=[('CONCENTRATION', 'LAST'), ('BUDGET', 'LAST')],
+        printrecord=[('CONCENTRATION', gwt_oc_conc), ('BUDGET', gwt_oc_budget)],
+        saverecord=[('CONCENTRATION', gwt_oc_conc), ('BUDGET', gwt_oc_budget)],
     )
     file_extensions.append('oc')
 
@@ -303,7 +333,7 @@ def make_transport_model(sim, model_data):
     flopy.mf6.ModflowGwfgwt(
         sim,
         exgtype='GWF6-GWT6',
-        exgmnamea=model_data['name'],
+        exgmnamea='gwf_' + model_data['name'],
         exgmnameb=gwtname,
         filename=f'{model_data["name"]}.gwfgwt'
     )
@@ -313,7 +343,8 @@ def make_transport_model(sim, model_data):
 
 def get_simulation(model_path, exe_name=None, verbosity_level=0):
     """Get simulation for a model."""
-    exe_name = _get_mf6_exe(exe_name)
+    if exe_name is None:
+        exe_name = _get_mf6_exe(exe_name)
     sim = flopy.mf6.MFSimulation.load(
         sim_ws=model_path,
         exe_name=exe_name,
@@ -323,7 +354,7 @@ def get_simulation(model_path, exe_name=None, verbosity_level=0):
 
 
 def run_simulation(model_path, verbosity_level=0):
-    """Run a MODFLOW 6 model"""
+    """Run a MODFLOW 6 model."""
     sim = get_simulation(
         model_path,
         verbosity_level=verbosity_level)
@@ -331,10 +362,12 @@ def run_simulation(model_path, verbosity_level=0):
 
 
 def clone_model(src, dst=None, config=CONFIG):
-    """Clone a MODFLOW6 model.
+    """
+    Clone a MODFLOW6 model.
 
     Copy all input files listed in `.internal/model_files from `src` to
-    `dst`."""
+    `dst`.
+    """
     src = Path(src)
     if dst is None:
         dst = src.parent / (src.name + '_controlled')
