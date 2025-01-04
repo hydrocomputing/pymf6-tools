@@ -5,7 +5,8 @@ from ._version import version
 """Run all."""
 
 def do_all(model_path, name, wel_q=0, verbosity_level=0):
-    """Do all steps:
+    """
+    Do all steps.
 
     * create model input files
     * run the simulation
@@ -29,5 +30,5 @@ def do_all(model_path, name, wel_q=0, verbosity_level=0):
 
 
 def main():
-    """pymf6tools version dispaly"""
+    """pymf6tools version display."""
     print(f'pymf6tools version: {version}')
