@@ -1,8 +1,9 @@
+"""Run all steps."""
+
 from .plotting import show_heads, show_well_head
 from .make_model import make_input, run_simulation
 from ._version import version
 
-"""Run all."""
 
 def do_all(model_path, name, wel_q=0, verbosity_level=0):
     """
