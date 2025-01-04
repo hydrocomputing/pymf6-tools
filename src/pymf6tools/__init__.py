@@ -1,1 +1,1 @@
-"""Tool for building MF6 models with flopy"""
+"""Tool for building MF6 models with flopy."""
