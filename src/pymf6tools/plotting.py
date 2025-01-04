@@ -18,26 +18,31 @@ def show_heads(
         name,
         title='',
         show_grid=True,
-        show_wells=True):
+        show_wells=True,
+        show_contours=True,
+        kstpkper=(119, 2),
+        spdis_index=240
+        ):
     """Plot calculated heads along with flow vector."""
     sim = get_simulation(model_path, name)
-    gwf = sim.get_model(name)
+    gwf_name = 'gwf_' + name
+    gwf = sim.get_model(gwf_name)
+    if gwf is None:
+        raise NameError(f'no model with the name {gwf_name}')
 
-    head = gwf.output.head().get_data(kstpkper=(119, 2))
+    head = gwf.output.head().get_data(kstpkper=kstpkper)
     bud = gwf.output.budget()
-    spdis = bud.get_data(text='DATA-SPDIS')[240]
+    spdis = bud.get_data(text='DATA-SPDIS')[spdis_index]
     qx, qy, _ = get_specific_discharge(spdis, gwf)
     pmv = flopy.plot.PlotMapView(gwf)
     levels=np.arange(0.2, 1.4, 0.02)
     arr = pmv.plot_array(head)
     if show_grid:
         pmv.plot_grid(colors='white')
-    pmv.contour_array(
-        head,
-        levels=levels,
-    )
+    if show_contours:
+        pmv.contour_array(head, levels=levels)
     if show_wells:
-        pmv.plot_bc(name='wel', plotAll=True, kper=1)
+        pmv.plot_bc(name='wel', plotAll=True, kper=kstpkper[-1])
     plot = pmv.plot_vector(
         qx,
         qy,
@@ -61,12 +66,13 @@ def show_bcs(
         show_grid=True):
     """Show location of boundary conditions."""
     handles = []
+    gwf_name = 'gwf_' + name
     sim = get_simulation(model_path, name)
-    gwf = sim.get_model(name)
+    gwf = sim.get_model(gwf_name)
     pmv = flopy.plot.PlotMapView(gwf)
 
     def add_bc(name, handles=handles, pmv=pmv):
-        """Add a BC including legend entry"""
+        """Add a BC including legend entry."""
         name = name.upper()
         bc = pmv.plot_bc(name=name, plotAll=True, kper=1)
         color = bc.cmap.colors[-1]
@@ -77,16 +83,20 @@ def show_bcs(
     if show_grid:
         pmv.plot_grid()
     plot.axes.set_title(title)
+    plot.axes.set_xlabel('x (m)')
+    plot.axes.set_ylabel('y (m)')
     plot.axes.legend(handles=handles, loc=(1.2, 0))
     return plot
 
 def show_concentration(
         model_path, name,
         title='',
+        layer=0,
         show_grid=True,
         levels=None,
         kstpkper=None,
         show_wells=True,
+        show_rivers=True,
         vmin=None,
         vmax=None,
         show_contours=True,
@@ -96,7 +106,7 @@ def show_concentration(
     sim = get_simulation(model_path, name)
     gwt = sim.get_model(gwtname)
 
-    conc = gwt.output.concentration().get_data(kstpkper)
+    conc = gwt.output.concentration().get_data(kstpkper)[layer]
     pmv = flopy.plot.PlotMapView(gwt)
     arr = pmv.plot_array(conc, vmin=vmin, vmax=vmax)
     if show_grid:
@@ -106,18 +116,18 @@ def show_concentration(
     gwf = flow_sim.get_model(name)
     if show_wells:
         plot = pmv.plot_bc(package=gwf.get_package('wel'), plotAll=True, kper=1)
-    else:
+    if show_rivers:
         plot = pmv.plot_bc(package=gwf.get_package('riv-1'), plotAll=True, kper=1)
     if show_contours:
         pmv.contour_array(
             conc,
             levels=levels,
         )
-    plot.axes.set_xlabel('x (m)')
-    plot.axes.set_ylabel('y (m)')
-    plot.axes.set_title(title)
+    arr.axes.set_xlabel('x (m)')
+    arr.axes.set_ylabel('y (m)')
+    arr.axes.set_title(title)
     cbar = arr.get_figure().colorbar(arr, ticks=levels)
-    cbar.set_label('Concentration')
+    cbar.set_label('Concentration (mg/L)')
     if show_arrows:
         gwf = sim.get_model(name)
         bud = gwf.output.budget()
@@ -128,7 +138,7 @@ def show_concentration(
             qy,
             normalize=True,
             color="white")
-    return plot
+    return arr
 
 
 def show_well_head(
@@ -144,11 +154,12 @@ def show_well_head(
         x=(0, 32)):
     """Plot head at well over time."""
     sim = get_simulation(model_path, model_name)
-    gwf = sim.get_model(model_name)
-    ml = sim.get_model(model_name)
+    gwf_name = 'gwf_' + model_name
+    gwf = sim.get_model(gwf_name)
+    # ml = sim.get_model(model_name)
     print(gwf.output)
     heads = gwf.output.head().get_ts(wel_coords)
-    time = ml.output.budget().get_data(text="SPDIS")[times]
+    time = gwf.output.budget().get_data(text="SPDIS")[times]
     _, ax = plt.subplots()
     ax.plot(heads[:, 0], heads[:, 1], label='Well water level')
     ax.set_xlabel('Time (d)')
