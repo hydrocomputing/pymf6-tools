@@ -1,4 +1,5 @@
-"""Base model data.
+"""
+Base model data.
 
 Data for a basic flow model build with `flopy`.
 Changing the data allows to quickly create a modified model.
@@ -45,12 +46,12 @@ BASE_MODEL_DATA = {
     'initial_head': 10.0,
     # flopy.mf6.ModflowGwfchd(
     'chd': [
-        [(0, 0, 0), 10.], 
+        [(0, 0, 0), 10.],
         [(0, 14, 9), 10.]
     ],
     'transport': False,
     'river': False,
-}         
+}
 
 BASE_TRANSPORT_MODEL_DATA = {
     'wells':{},
@@ -71,23 +72,23 @@ BASE_TRANSPORT_MODEL_DATA = {
     ],
 }
 
-NRIV = 12 
+NRIV = 12
 
 BASE_RIVER_MODEL_DATA = {
-    'river_spd': { 
+    'river_spd': {
         'rivlay': [0] * NRIV,
         'rivrow': [1, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 7],
         'rivcol': [0, 2, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8],
-        'rivstg': np.linspace(13, 14, NRIV), 
-        'rivbot': np.linspace(7, 10, NRIV), 
-        'rivcnd': [0.05] * NRIV  
-        } , 
-                     
-    'river_boundnames': None, 
-    'obs_dict': None, # dict, 
+        'rivstg': np.linspace(13, 14, NRIV),
+        'rivbot': np.linspace(7, 10, NRIV),
+        'rivcnd': [0.05] * NRIV
+        } ,
+
+    'river_boundnames': None,
+    'obs_dict': None, # dict,
     'tsdict': None, # dict,
-    'cond': None, 
-}         
+    'cond': None,
+}
 
 BASE_WELL_MODEL_DATA = {
     'wells': {
@@ -102,9 +103,10 @@ def make_model_data(
         specific_model_data,
         base_model_data=BASE_MODEL_DATA,
         base_transport_model_data=BASE_TRANSPORT_MODEL_DATA,
-        base_river_model_data=BASE_RIVER_MODEL_DATA, 
+        base_river_model_data=BASE_RIVER_MODEL_DATA,
         base_well_model_data=BASE_WELL_MODEL_DATA  ):
-    """Make model data.
+    """
+    Make model data.
 
     specific_model_data - dictionary with data specific for the current model
                           will merged with `base_model_data`
@@ -116,7 +118,7 @@ def make_model_data(
     base_river_model_data=deepcopy(base_river_model_data)
     base_transport_model_data=deepcopy(base_transport_model_data)
     base_well_model_data=deepcopy(base_well_model_data)
-    
+
     if specific_model_data['transport']:
         base_model_data.update(base_transport_model_data)
     if specific_model_data['river_active']:
