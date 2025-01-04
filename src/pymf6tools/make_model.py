@@ -380,6 +380,7 @@ def clone_model(src, dst=None, config=CONFIG):
         shutil.copy(src / file_name, dst / file_name)
 
 def make_river( model_data, file_extensions, gwf):
+    """"Create river input data."""
     entry = []
     riv = model_data['river_spd']
     for counter in range(len(riv['rivlay'])):
