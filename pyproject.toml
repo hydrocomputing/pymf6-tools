@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pymf6tools"
+name = "pymf6-tools"
 description = "Tools for creating models to be used with pymf6"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -35,7 +35,7 @@ dependencies = ["flopy"]
 dynamic = ["version"]
 
 [project.scripts]
-pymf6tools = "pymf6tools.main:main"
+pymf6tools = "pymf6_tools.main:main"
 
 # [project.urls]
 
@@ -47,7 +47,7 @@ where = ["src"]
 exclude = ["tests"]
 
 [tool.setuptools.package-dir]
-pymf6 = "src/pymf6tools"
+pymf6 = "src/pymf6_tools"
 
 [tool.setuptools_scm]
-write_to = "src/pymf6tools/_version.py"
+write_to = "src/pymf6_tools/_version.py"
