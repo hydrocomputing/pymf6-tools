@@ -89,7 +89,7 @@ def show_concentration(
     layer=0,
     show_grid=True,
     levels=None,
-    kstpkper=None,
+    kstpkper=(119, 2),
     show_wells=True,
     show_rivers=True,
     vmin=None,
@@ -98,9 +98,11 @@ def show_concentration(
     show_arrows=False,
 ):
     """Plot calculated heads along with flow vector."""
-    gwtname = 'gwt_' + name
+    gwt_name = 'gwt_' + name
+    gwf_name = 'gwf_' + name
     sim = get_simulation(model_path, name)
-    gwt = sim.get_model(gwtname)
+    gwf = sim.get_model(gwf_name)
+    gwt = sim.get_model(gwt_name)
 
     conc = gwt.output.concentration().get_data(kstpkper)[layer]
     pmv = flopy.plot.PlotMapView(gwt)
@@ -108,8 +110,7 @@ def show_concentration(
     if show_grid:
         pmv.plot_grid(colors='white')
 
-    flow_sim = get_simulation(model_path, name)
-    gwf = flow_sim.get_model(name)
+
     if show_wells:
         plot = pmv.plot_bc(package=gwf.get_package('wel'), plotAll=True, kper=1)
     if show_rivers:
@@ -127,7 +128,6 @@ def show_concentration(
     cbar = arr.get_figure().colorbar(arr, ticks=levels)
     cbar.set_label('Concentration (mg/L)')
     if show_arrows:
-        gwf = sim.get_model(name)
         bud = gwf.output.budget()
         spdis = bud.get_data(text='DATA-SPDIS')[240]
         qx, qy, _ = get_specific_discharge(spdis, gwf)
