@@ -130,7 +130,7 @@ def make_input(
         )
     file_extensions.append(pname)
 
-    if model_data['wells_active']:
+    if model_data.get('wells_active'):
         # Stress period data for the well
         stress_period_data = {}
         for index in range(repeat_times):
@@ -187,14 +187,14 @@ def make_input(
             ])
     file_extensions.append('oc')
 
-    if model_data['transport']:
+    if model_data.get('transport'):
         file_extensions.append('gwfgwt')
     model_file_names = set(f'{gwf_name}.{ext}' for ext in file_extensions)
     model_file_names.add('mfsim.nam')
     _save_model_file_names(model_path, model_file_names)
-    if model_data['transport']:
+    if model_data.get('transport'):
         make_transport_model(sim, model_data)
-    if model_data['river_active']:
+    if model_data.get('river_active'):
         make_river(model_data=model_data, gwf=gwf, file_extensions=file_extensions)
     sim.write_simulation()
 
@@ -288,7 +288,7 @@ def make_transport_model(sim, model_data):
         ('CHD-1', 'AUX', 'CONCENTRATION'),
     ]
 
-    if model_data['wells_active']:
+    if model_data.get('wells_active'):
         sourcerecarray.append(('WEL-1', 'AUX', 'CONCENTRATION'))
 
     flopy.mf6.ModflowGwtssm(

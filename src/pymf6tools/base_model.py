@@ -119,11 +119,11 @@ def make_model_data(
     base_transport_model_data=deepcopy(base_transport_model_data)
     base_well_model_data=deepcopy(base_well_model_data)
 
-    if specific_model_data['transport']:
+    if specific_model_data.get('transport'):
         base_model_data.update(base_transport_model_data)
-    if specific_model_data['river_active']:
+    if specific_model_data.get('river_active'):
         base_model_data.update(base_river_model_data)
-    if specific_model_data['wells_active']:
+    if specific_model_data.get('wells_active'):
         base_model_data.update(base_well_model_data)
     # old way up to Python 3.8
     if sys.version_info[:2] < (3, 9):
