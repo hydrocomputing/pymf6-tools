@@ -12,7 +12,7 @@ def run_model(sim_path, exe_path='mf6', dll_path=None):
     with chdir(sim_path):
         ret = run([exe_path], capture_output=True, encoding='utf-8')
     success = True if ret.returncode == 0 else False
-    err_msg = ret.stdout if ret.returncode != 0 else None
+    err_msg = ret.stdout if ret.returncode != 0 else ''
     res = {'success': success, 'error': err_msg}
     return res
 
