@@ -8,3 +8,4 @@ tests/mf6_examples/models/*/tests/
 **nogit_*
 tests/mf6_examples/results.pcl
 Scratch.ipynb
+tests/mf6_examples/out/**
