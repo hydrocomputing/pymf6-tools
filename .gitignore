@@ -4,3 +4,6 @@ _version.py
 dist/**
 tests/*models/**
 **/.ipynb_checkpoints/**
+tests/mf6_examples/models/*/tests/
+**nogit_*
+tests/mf6_examples/results.pcl
