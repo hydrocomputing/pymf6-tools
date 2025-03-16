@@ -31,5 +31,5 @@ def do_all(model_path, name, wel_q=0, verbosity_level=0):
 
 
 def main():
-    """pymf6tools version display."""
-    print(f'pymf6tools version: {version}')
+    """pymf6-tools version display."""
+    print(f'pymf6-tools version: {version}')

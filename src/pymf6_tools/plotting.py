@@ -6,7 +6,7 @@ import numpy as np
 import flopy
 from flopy.utils.postprocessing import get_specific_discharge
 
-from pymf6tools.make_model import get_simulation
+from pymf6_tools.make_model import get_simulation
 
 
 def show_heads(
