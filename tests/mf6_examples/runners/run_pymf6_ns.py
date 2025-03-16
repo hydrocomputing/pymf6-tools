@@ -14,7 +14,7 @@ def run_model(sim_path, exe_path=None, dll_path=None):
         for model in mf6.model_loop():
             pass
         success = True
-        err_msg = None
+        err_msg = ''
     except Exception as err:
         success = False
         err_msg = repr(err)
