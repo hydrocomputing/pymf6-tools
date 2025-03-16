@@ -55,6 +55,7 @@ def run_in_subprocess(runner, **kwargs):
     try:
         res = json.loads(ret.stdout)
     except json.JSONDecodeError:
+        print(ret.stdout)
         res = {}
     if ret.returncode != 0:
         sub_paths = kwargs['simulation_paths']['sub_paths']
@@ -113,14 +114,11 @@ def run_all_models(
         for key, future in futures.items():
             runner_name, model = key
             results.setdefault(runner_name, {})[model] = future.result()
-    import pprint
-
-    pprint.pprint(results)
     return results
 
 
-def main(config_file_name='config.ini'):
+def run_and_store_models(pickle_file_name='results.pcl', config_file_name='config.ini'):
     """Run models and save results."""
     config = read_config(config_file=config_file_name)
-    with open('results.pcl', 'wb') as fobj:
+    with open(pickle_file_name, 'wb') as fobj:
         pickle.dump(run_all_models(config), file=fobj)
