@@ -124,7 +124,3 @@ def main(config_file_name='config.ini'):
     config = read_config(config_file=config_file_name)
     with open('results.pcl', 'wb') as fobj:
         pickle.dump(run_all_models(config), file=fobj)
-
-
-if __name__ == '__main__':
-    main()
