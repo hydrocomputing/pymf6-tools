@@ -35,7 +35,7 @@ dependencies = ["flopy"]
 dynamic = ["version"]
 
 [project.scripts]
-pymf6tools = "pymf6_tools.main:main"
+pymf6-tools = "pymf6_tools.main:main"
 
 # [project.urls]
 
