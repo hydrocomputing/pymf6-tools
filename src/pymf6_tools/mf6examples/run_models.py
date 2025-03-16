@@ -55,7 +55,9 @@ def run_in_subprocess(runner, **kwargs):
     try:
         res = json.loads(ret.stdout)
     except json.JSONDecodeError:
-        print(ret.stdout)
+        out = ret.stdout.strip()
+        if out:
+            print(out)
         res = {}
     if ret.returncode != 0:
         sub_paths = kwargs['simulation_paths']['sub_paths']

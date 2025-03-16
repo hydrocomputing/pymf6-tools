@@ -19,4 +19,4 @@ def store_dfs(pickle_file, out_path=Path()):
         res = pickle.load(fobj)
     for name, data in res.items():
         df = make_df(data)
-        df.to_hdf(out_path / f'{name}.h5', key=name)
+        df.to_hdf(Path(out_path) / f'{name}.h5', key=name)

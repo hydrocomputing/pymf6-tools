@@ -2,7 +2,7 @@
 
 
 from contextlib import chdir
-from subprocess import run
+from subprocess import run, CalledProcessError
 
 from pymf6_tools.mf6examples.process_runner import run_func
 
@@ -11,10 +11,8 @@ def run_model(sim_path, exe_path='mf6', dll_path=None):
     """Run one MF6 model."""
     with chdir(sim_path):
         ret = run([exe_path], capture_output=True, encoding='utf-8')
-    success = True if ret.returncode == 0 else False
-    err_msg = ret.stdout if ret.returncode != 0 else ''
-    res = {'success': success, 'error': err_msg}
-    return res
+    if ret.returncode != 0:
+        raise Exception(ret.stderr + ret.stdout)
 
 if __name__ == '__main__':
     run_func(run_model)
