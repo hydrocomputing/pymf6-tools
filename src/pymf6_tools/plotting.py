@@ -151,8 +151,6 @@ def show_well_head(
     sim = get_simulation(model_path, model_name)
     gwf_name = 'gwf_' + model_name
     gwf = sim.get_model(gwf_name)
-    # ml = sim.get_model(model_name)
-    print(gwf.output)
     heads = gwf.output.head().get_ts(wel_coords)
     time = gwf.output.budget().get_data(text='SPDIS')[times]
     _, ax = plt.subplots()
