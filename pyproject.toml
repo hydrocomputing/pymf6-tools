@@ -47,7 +47,7 @@ where = ["src"]
 exclude = ["tests"]
 
 [tool.setuptools.package-dir]
-pymf6 = "src/pymf6_tools"
+pymf6-tools = "src/pymf6_tools"
 
 [tool.setuptools_scm]
 write_to = "src/pymf6_tools/_version.py"
