@@ -1,10 +1,15 @@
+"""Read config."""
+
+from configparser import ConfigParser, ExtendedInterpolation
 from pathlib import Path
 
 import pymf6
 
-# BASE_PATH = Path('models/2025_02_06')
-BASE_PATH = Path('models/nogit_short')
-MF6_EXAMPLES_PATH = BASE_PATH / 'mf6examples'
-TESTS_PATH = BASE_PATH / 'tests'
-MF6_EXE_PATH = pymf6.info['exe_path']
-MF6_DLL_PATH = pymf6.info['dll_path']
+def read_config(config_file):
+    """Read config."""
+    config = ConfigParser(interpolation=ExtendedInterpolation())
+    config.read(config_file)
+    for name in ['mf6_exe_path', 'mf6_dll_path']:
+        if not config['paths'][name]:
+            config['paths'][name] = str(pymf6.info[name.split('_', 1)[1]])
+    return {name: Path(value) for name, value in dict(config['paths']).items()}

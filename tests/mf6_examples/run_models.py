@@ -8,16 +8,16 @@ from shutil import copytree
 from subprocess import run
 import sys
 
-from config import MF6_EXAMPLES_PATH, TESTS_PATH, MF6_EXE_PATH, MF6_DLL_PATH
+from config import read_config
 
 
-def copy_input_files(
-    name, mf6_examples_path=MF6_EXAMPLES_PATH, tests_path=TESTS_PATH
-):
+def copy_input_files(name, config):
     """Copy MF6 input files to target dir."""
     try:
         copytree(
-            src=mf6_examples_path, dst=tests_path / name, dirs_exist_ok=True
+            src=config['mf6_examples_path'],
+            dst=config['tests_path'] / name,
+            dirs_exist_ok=True,
         )
     except FileExistsError:
         pass
@@ -62,9 +62,10 @@ def run_in_subprocess(runner, **kwargs):
             sub_path: {
                 'success': False,
                 'error': 'process did not run\n' + ret.stderr,
-                'run_time': 0}
-            for sub_path in sub_paths
+                'run_time': 0,
             }
+            for sub_path in sub_paths
+        }
     return res
 
 
@@ -86,43 +87,43 @@ def make_simulations(models_path):
         }
     return simulations
 
-
 def run_all_models(
-    mf6_examples_path=MF6_EXAMPLES_PATH,
-    tests_path=TESTS_PATH,
+    config,
     runners_path_name='runners',
 ):
     """Run all models."""
     runners = list(Path(runners_path_name).glob('run_*.py'))
     for runner in runners:
-        copy_input_files(name=runner.stem.split('_', 1)[1])
+        copy_input_files(config=config, name=runner.stem.split('_', 1)[1])
     futures = {}
     results = {}
     with ThreadPoolExecutor(max_workers=8) as executor:
         for runner in runners:
             name = runner.stem.split('_', 1)[1]
-            simulations = make_simulations(models_path=tests_path / name)
+            simulations = make_simulations(models_path=config['tests_path'] / name)
             for simulation_name, simulation_paths in simulations.items():
                 key = (name, simulation_name)
                 futures[key] = executor.submit(
                     run_in_subprocess,
                     runner,
                     simulation_paths=simulation_paths,
-                    exe_path=str(MF6_EXE_PATH),
-                    dll_path=str(MF6_DLL_PATH),
+                    exe_path=str(config['mf6_exe_path']),
+                    dll_path=str(config['mf6_dll_path']),
                 )
         for key, future in futures.items():
             runner_name, model = key
             results.setdefault(runner_name, {})[model] = future.result()
     import pprint
+
     pprint.pprint(results)
     return results
 
 
-def main():
+def main(config_file_name='config.ini'):
     """Run models and save results."""
+    config = read_config(config_file=config_file_name)
     with open('results.pcl', 'wb') as fobj:
-        pickle.dump(run_all_models(), file=fobj)
+        pickle.dump(run_all_models(config), file=fobj)
 
 
 if __name__ == '__main__':
