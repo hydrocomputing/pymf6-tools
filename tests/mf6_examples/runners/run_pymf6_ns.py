@@ -4,7 +4,7 @@
 
 from pymf6.mf6 import MF6
 
-from process_runner import run_func
+from pymf6_tools.mf6examples.process_runner import run_func
 
 
 def run_model(sim_path, exe_path=None, dll_path=None):

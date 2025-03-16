@@ -4,7 +4,7 @@
 from contextlib import chdir
 from subprocess import run
 
-from process_runner import run_func
+from pymf6_tools.mf6examples.process_runner import run_func
 
 
 def run_model(sim_path, exe_path='mf6', dll_path=None):
