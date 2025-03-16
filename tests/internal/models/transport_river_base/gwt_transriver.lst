@@ -1,0 +1,2903 @@
+                                   MODFLOW 6
+                U.S. GEOLOGICAL SURVEY MODULAR HYDROLOGIC MODEL
+                       GROUNDWATER TRANSPORT MODEL (GWT)
+                        VERSION 6.4.1 Release 12/09/2022
+
+        MODFLOW 6 compiled Feb 12 2023 12:41:20 with GCC version 11.3.0
+
+This software has been approved for release by the U.S. Geological 
+Survey (USGS). Although the software has been subjected to rigorous 
+review, the USGS reserves the right to update the software as needed 
+pursuant to further analysis and review. No warranty, expressed or 
+implied, is made by the USGS or the U.S. Government as to the 
+functionality of the software and related material nor shall the 
+fact of release constitute any such warranty. Furthermore, the 
+software is released on condition that neither the USGS nor the U.S. 
+Government shall be held liable for any damages resulting from its 
+authorized or unauthorized use. Also refer to the USGS Water 
+Resources Software User Rights Notice for complete use, copyright, 
+and distribution information.
+
+
+As a work of the United States Government, this USGS product is 
+in the public domain within the United States. You can copy, 
+modify, distribute, and perform the work, even for commercial 
+purposes, all without asking permission. Additionally, USGS 
+waives copyright and related rights in the work worldwide 
+through CC0 1.0 Universal Public Domain Dedication 
+(https://creativecommons.org/publicdomain/zero/1.0/).
+
+The following GNU Lesser General Public License (LGPL) libraries
+are used in this USGS product:
+
+    SPARSKIT version 2.0
+      ilut, luson, and qsplit 
+      (https://www-users.cse.umn.edu/~saad/software/SPARSKIT/)
+
+    RCM - Reverse Cuthill McKee Ordering
+      (https://people.math.sc.edu/Burkardt/f_src/rcm/rcm.html)
+
+    BLAS - Basic Linear Algebra Subprograms Level 1
+      (https://people.math.sc.edu/Burkardt/f_src/blas1_d/blas1_d.html)
+
+    SPARSEKIT - Sparse Matrix Utility Package
+      amux, dperm, dvperm, rperm, and cperm
+      (https://people.sc.fsu.edu/~jburkardt/f77_src/sparsekit/sparsekit.html)
+
+The following BSD-3 License libraries are used in this USGS product:
+
+    Modern Fortran DAG Library
+      Copyright (c) 2018, Jacob Williams
+      All rights reserved.
+      (https://github.com/jacobwilliams/daglib)
+
+MODFLOW 6 compiler options: -fdiagnostics-color=always -cpp -I
+src/libmf6core.a.p -I src -I ../src -I src/libmf6_external.a.p -isysroot
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer
+/SDKs/MacOSX.sdk -D__DYNAMIC__ -D __APPLE__ -isystem
+/Users/mike/miniconda3/envs/xmipy/include -march=armv8.3-a
+-mmacosx-version-min=10.9 -mlittle-endian -mabi=lp64 -g -O2 -O2 -Wall
+-Wpedantic -Wcharacter-truncation -Wno-unused-dummy-argument
+-Wno-intrinsic-shadow -Wno-maybe-uninitialized -Wno-uninitialized -std=f2008
+-fall-intrinsics -ffpe-summary=overflow -ffpe-trap=overflow,zero,invalid
+-ftree-vectorize -fPIC -fno-stack-protector -J src/libmf6core.a.p
+
+System command used to initiate simulation:
+/Users/mike/hydrocomputing/projects/2021/003_ModSimple_Phase2/Bearbeitung/MODFLOW6/mf6.4.1/bin_arm/mf6
+
+MODFLOW was compiled using uniform precision.
+
+Real Variables
+  KIND: 8
+  TINY (smallest non-zero value):    2.225074-308
+  HUGE (largest value):    1.797693+308
+  PRECISION: 15
+  SIZE IN BITS: 64
+
+Integer Variables
+  KIND: 4
+  HUGE (largest value): 2147483647
+  SIZE IN BITS: 32
+
+Long Integer Variables
+  KIND: 8
+  HUGE (largest value): 9223372036854775807
+  SIZE IN BITS: 64
+
+Logical Variables
+  KIND: 4
+  SIZE IN BITS: 32
+
+
+ OPENED gwt_transriver.dis
+ FILE TYPE:DIS6                   UNIT 1015   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.ic
+ FILE TYPE:IC6                    UNIT 1016   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.adv
+ FILE TYPE:ADV6                   UNIT 1017   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.dsp
+ FILE TYPE:DSP6                   UNIT 1018   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.mst
+ FILE TYPE:MST6                   UNIT 1019   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.ssm
+ FILE TYPE:SSM6                   UNIT 1020   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.cnc
+ FILE TYPE:CNC6                   UNIT 1021   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+
+ OPENED gwt_transriver.oc
+ FILE TYPE:OC6                    UNIT 1022   STATUS:OLD                 
+ FORMAT:FORMATTED              ACCESS:SEQUENTIAL          
+ ACTION:READ                
+
+ NAMEFILE OPTIONS:
+    FLOWS WILL BE SAVED TO BUDGET FILE SPECIFIED IN OUTPUT CONTROL
+
+ DIS -- STRUCTURED GRID DISCRETIZATION PACKAGE, VERSION 2 : 3/27/2014 - INPUT READ FROM UNIT 1015
+
+ Loading input for GWT_TRANSRIVER/DIS
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+   NLAY = 3
+   NROW = 15
+   NCOL = 10
+   DELR = 100.00000000000000
+   DELC = 100.00000000000000
+   TOP = 15.000000000000000
+   BOTM = variable 3D double precision array ranging from -15.000000000000000 to -5.0000000000000000
+ Loading input complete...
+
+
+ DSP-- DISPERSION PACKAGE, VERSION 1, 1/24/2018 INPUT READ FROM UNIT 1018
+
+
+ Loading input for GWT_TRANSRIVER/DSP
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+   XT3D_OFF = 1
+   ALH = 1.0000000000000000
+   ATH1 = 1.0000000000000000
+ Loading input complete...
+
+ Setting Discretization Options
+    Model length unit [0=UND, 1=FEET, 2=METERS, 3=CENTIMETERS] set as 2
+ End Setting Discretization Options
+
+ Setting Discretization Dimensions
+    NLAY = 3
+    NROW = 15
+    NCOL = 10
+ End Setting Discretization Dimensions
+
+ Setting Discretization Griddata
+    DELR set from input file
+    DELC set from input file
+    TOP set from input file
+    BOTM set from input file
+ End Setting Discretization Griddata
+
+
+ FMI -- FLOW MODEL INTERFACE, VERSION 1, 8/29/2017
+  FLOWS PROVIDED BY A GWF MODEL IN THIS SIMULATION
+
+ ADV-- ADVECTION PACKAGE, VERSION 1, 8/25/2017 INPUT READ FROM UNIT 1017
+
+
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+ PROCESSING ADVECTION OPTIONS
+    ADVECTION WEIGHTING SCHEME HAS BEEN SET TO: UPSTREAM
+ END OF ADVECTION OPTIONS
+ Setting DSP Options
+    XT3D formulation [0=INACTIVE, 1=ACTIVE, 3=ACTIVE RHS] set to: 0
+ End Setting DSP Options
+
+ Setting DSP Griddata
+    ALH set from input file
+    ATH1 set from input file
+ End Setting DSP Griddata
+
+
+ CNC   -- CNC PACKAGE, VERSION 8, 2/22/2014 INPUT READ FROM UNIT 1021
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+
+ PROCESSING CNC OPTIONS
+ END OF CNC OPTIONS
+
+ PROCESSING CNC DIMENSIONS
+    MAXBOUND =       2
+ END OF CNC DIMENSIONS
+
+ IC -- INITIAL CONDITIONS PACKAGE, VERSION 8, 3/28/2015 INPUT READ FROM UNIT 1016
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+ PROCESSING GRIDDATA
+
+ INITIAL CONCENTRATION =   1.000000    
+ END PROCESSING GRIDDATA
+
+ MST -- MOBILE STORAGE AND TRANSFER PACKAGE, VERSION 1, 7/29/2020 INPUT READ FROM UNIT 1019
+
+
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+ PROCESSING MOBILE STORAGE AND TRANSFER OPTIONS
+ END OF MOBILE STORAGE AND TRANSFER OPTIONS
+ PROCESSING GRIDDATA
+
+   MOBILE DOMAIN POROSITY =  0.3500000    
+ END PROCESSING GRIDDATA
+
+ SSM -- SOURCE-SINK MIXING PACKAGE, VERSION 1, 8/25/2017 INPUT READ FROM UNIT 1020
+
+
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+ PROCESSING SSM OPTIONS
+ END OF SSM OPTIONS
+ PROCESSING SOURCES
+ AUX SOURCE DETECTED.
+    USING AUX COLUMN 1 IN PACKAGE CHD-1
+ AUX SOURCE DETECTED.
+    USING AUX COLUMN 1 IN PACKAGE WEL-1
+ END PROCESSING SOURCES
+ OPTIONAL FILEINPUT BLOCK NOT FOUND.  CONTINUING.
+      THE LAST TIME STEP WILL BE PRINTED
+      THE LAST TIME STEP WILL BE PRINTED
+ # File generated by Flopy version 3.4.1 on 01/04/2024 at 09:56:20.
+
+ PROCESSING OC OPTIONS
+
+    BUDGET INFORMATION WILL BE WRITTEN TO:
+      UNIT NUMBER: 1028
+      FILE NAME: gwt_transriver.cbc
+
+ OPENED gwt_transriver.cbc
+ FILE TYPE:DATA(BINARY)   UNIT 1028   STATUS:REPLACE             
+ FORMAT:UNFORMATTED            ACCESS:STREAM              
+ ACTION:READWRITE           
+
+    CONCENTRATION INFORMATION WILL BE WRITTEN TO:
+      UNIT NUMBER: 1029
+      FILE NAME: gwt_transriver.ucn
+
+ OPENED gwt_transriver.ucn
+ FILE TYPE:DATA(BINARY)   UNIT 1029   STATUS:REPLACE             
+ FORMAT:UNFORMATTED            ACCESS:STREAM              
+ ACTION:READWRITE           
+
+ END OF OC OPTIONS
+
+start timestep kper="1" kstp="1" mode="normal"
+
+
+ BEGIN READING OUTPUT CONTROL FOR STRESS PERIOD 1
+      THE LAST TIME STEP WILL BE SAVED
+      THE LAST TIME STEP WILL BE SAVED
+      THE LAST TIME STEP WILL BE PRINTED
+      THE LAST TIME STEP WILL BE PRINTED
+
+ END READING OUTPUT CONTROL FOR STRESS PERIOD 1
+ UBDSV1 SAVING     FLOW-JA-FACE ON UNIT   1028 AT TIME STEP      1, STRESS PERIOD      1
+ UBDSV1 SAVING  STORAGE-AQUEOUS ON UNIT   1028 AT TIME STEP      1, STRESS PERIOD      1
+ UBDSV06 SAVING  SOURCE-SINK MIX IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE SSM              ON UNIT   1028 AT TIME STEP      1, STRESS PERIOD      1
+ UBDSV06 SAVING              CNC IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE CNC              ON UNIT   1028 AT TIME STEP      1, STRESS PERIOD      1
+1
+  CONCENTRATION IN LAYER   1 AT END OF TIME STEP   1 IN STRESS PERIOD    1
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2     0.999998         1.00000        0.999998         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000        0.999998         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000        0.999998         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000        0.999998        0.999998         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         10.0000         1.00000        0.999998         1.00000        0.999998         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         10.0000         1.00000         1.00000         1.00000         1.00000        0.999997         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000        0.999997        0.999997         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000        0.999997         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   2 AT END OF TIME STEP   1 IN STRESS PERIOD    1
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   3 AT END OF TIME STEP   1 IN STRESS PERIOD    1
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+
+ CONCENTRATION WILL BE SAVED ON UNIT 1029 AT END OF TIME STEP    1, STRESS PERIOD    1
+
+
+  MASS BUDGET FOR ENTIRE MODEL AT END OF TIME STEP    1, STRESS PERIOD   1
+  ---------------------------------------------------------------------------------------------------
+
+     CUMULATIVE MASS      M       RATES FOR THIS TIME STEP      M/T          PACKAGE NAME    
+     ------------------                 ------------------------                     ----------------
+
+           IN:                                      IN:
+           ---                                      ---
+     STORAGE-AQUEOUS =           2.0807       STORAGE-AQUEOUS =           2.0807     MST                              
+                 WEL =           0.0000                   WEL =           0.0000     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =           0.0000                   CHD =           0.0000     SSM_CHD-1                        
+                 CNC =           0.8694                   CNC =           0.8694     CNC                              
+
+            TOTAL IN =           2.9501              TOTAL IN =           2.9501
+
+          OUT:                                     OUT:
+          ----                                     ----
+     STORAGE-AQUEOUS =           0.8286       STORAGE-AQUEOUS =           0.8286     MST                              
+                 WEL =           0.0000                   WEL =           0.0000     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =           2.0430                   CHD =           2.0430     SSM_CHD-1                        
+                 CNC =       7.8458E-02                   CNC =       7.8458E-02     CNC                              
+
+           TOTAL OUT =           2.9501             TOTAL OUT =           2.9501
+
+            IN - OUT =      -1.4247E-10              IN - OUT =      -1.4247E-10
+
+ PERCENT DISCREPANCY =          -0.00     PERCENT DISCREPANCY =          -0.00
+
+
+
+
+         TIME SUMMARY AT END OF TIME STEP    1 IN STRESS PERIOD    1
+                    SECONDS     MINUTES      HOURS       DAYS        YEARS
+                    -----------------------------------------------------------
+   TIME STEP LENGTH  86400.      1440.0      24.000      1.0000     2.73785E-03
+ STRESS PERIOD TIME  86400.      1440.0      24.000      1.0000     2.73785E-03
+         TOTAL TIME  86400.      1440.0      24.000      1.0000     2.73785E-03
+
+
+end timestep
+
+
+start timestep kper="2" kstp="1" mode="normal"
+
+
+ END OF FILE DETECTED IN OUTPUT CONTROL.
+ CURRENT OUTPUT CONTROL SETTINGS WILL BE 
+ REPEATED UNTIL THE END OF THE SIMULATION.
+
+ OUTPUT CONTROL FOR STRESS PERIOD 2 IS REPEATED USING SETTINGS FROM A PREVIOUS STRESS PERIOD.
+
+ REUSING CNCS FROM LAST STRESS PERIOD
+
+end timestep
+
+
+start timestep kper="2" kstp="2" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="3" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="4" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="5" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="6" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="7" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="8" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="9" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="10" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="11" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="12" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="13" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="14" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="15" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="16" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="17" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="18" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="19" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="20" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="21" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="22" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="23" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="24" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="25" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="26" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="27" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="28" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="29" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="30" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="31" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="32" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="33" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="34" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="35" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="36" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="37" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="38" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="39" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="40" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="41" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="42" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="43" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="44" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="45" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="46" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="47" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="48" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="49" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="50" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="51" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="52" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="53" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="54" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="55" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="56" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="57" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="58" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="59" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="60" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="61" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="62" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="63" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="64" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="65" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="66" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="67" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="68" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="69" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="70" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="71" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="72" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="73" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="74" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="75" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="76" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="77" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="78" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="79" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="80" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="81" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="82" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="83" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="84" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="85" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="86" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="87" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="88" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="89" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="90" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="91" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="92" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="93" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="94" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="95" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="96" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="97" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="98" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="99" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="100" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="101" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="102" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="103" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="104" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="105" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="106" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="107" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="108" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="109" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="110" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="111" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="112" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="113" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="114" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="115" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="116" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="117" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="118" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="119" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="2" kstp="120" mode="normal"
+
+ UBDSV1 SAVING     FLOW-JA-FACE ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      2
+ UBDSV1 SAVING  STORAGE-AQUEOUS ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      2
+ UBDSV06 SAVING  SOURCE-SINK MIX IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE SSM              ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      2
+ UBDSV06 SAVING              CNC IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE CNC              ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      2
+1
+  CONCENTRATION IN LAYER   1 AT END OF TIME STEP 120 IN STRESS PERIOD    2
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2     0.999977         1.00000        0.999976         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000        0.999976         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000        0.999975         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00004         1.00000        0.999975        0.999973         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00004         10.0000         1.00000        0.999974         1.00000        0.999972         1.00000         1.00000         1.00000         1.00000    
+   7      1.00003         10.0000         1.00000         1.00000         1.00000         1.00000        0.999972         1.00000         1.00000         1.00000    
+   8      1.00000         1.00002         1.00000         1.00000         1.00000         1.00000         1.00000        0.999971        0.999970         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000        0.999970         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   2 AT END OF TIME STEP 120 IN STRESS PERIOD    2
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00001         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   3 AT END OF TIME STEP 120 IN STRESS PERIOD    2
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+
+ CONCENTRATION WILL BE SAVED ON UNIT 1029 AT END OF TIME STEP  120, STRESS PERIOD    2
+
+
+  MASS BUDGET FOR ENTIRE MODEL AT END OF TIME STEP  120, STRESS PERIOD   2
+  ---------------------------------------------------------------------------------------------------
+
+     CUMULATIVE MASS      M       RATES FOR THIS TIME STEP      M/T          PACKAGE NAME    
+     ------------------                 ------------------------                     ----------------
+
+           IN:                                      IN:
+           ---                                      ---
+     STORAGE-AQUEOUS =          24.2094       STORAGE-AQUEOUS =           2.2117     MST                              
+                 WEL =           0.0000                   WEL =           0.0000     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =           0.0000                   CHD =           0.0000     SSM_CHD-1                        
+                 CNC =           9.5555                   CNC =           0.8686     CNC                              
+
+            TOTAL IN =          33.7649              TOTAL IN =           3.0802
+
+          OUT:                                     OUT:
+          ----                                     ----
+     STORAGE-AQUEOUS =           8.9288       STORAGE-AQUEOUS =           0.8088     MST                              
+                 WEL =           1.5000                   WEL =           0.1500     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =          22.4730                   CHD =           2.0430     SSM_CHD-1                        
+                 CNC =           0.8631                   CNC =       7.8461E-02     CNC                              
+
+           TOTAL OUT =          33.7649             TOTAL OUT =           3.0802
+
+            IN - OUT =      -7.8833E-10              IN - OUT =      -6.3498E-10
+
+ PERCENT DISCREPANCY =          -0.00     PERCENT DISCREPANCY =          -0.00
+
+
+
+
+         TIME SUMMARY AT END OF TIME STEP  120 IN STRESS PERIOD    2
+                    SECONDS     MINUTES      HOURS       DAYS        YEARS
+                    -----------------------------------------------------------
+   TIME STEP LENGTH  7200.0      120.00      2.0000     8.33333E-02 2.28154E-04
+ STRESS PERIOD TIME 8.64000E+05  14400.      240.00      10.000     2.73785E-02
+         TOTAL TIME 9.50400E+05  15840.      264.00      11.000     3.01164E-02
+
+
+end timestep
+
+
+start timestep kper="3" kstp="1" mode="normal"
+
+
+ OUTPUT CONTROL FOR STRESS PERIOD 3 IS REPEATED USING SETTINGS FROM A PREVIOUS STRESS PERIOD.
+
+ REUSING CNCS FROM LAST STRESS PERIOD
+
+end timestep
+
+
+start timestep kper="3" kstp="2" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="3" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="4" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="5" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="6" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="7" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="8" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="9" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="10" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="11" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="12" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="13" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="14" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="15" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="16" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="17" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="18" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="19" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="20" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="21" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="22" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="23" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="24" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="25" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="26" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="27" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="28" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="29" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="30" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="31" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="32" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="33" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="34" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="35" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="36" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="37" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="38" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="39" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="40" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="41" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="42" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="43" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="44" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="45" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="46" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="47" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="48" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="49" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="50" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="51" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="52" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="53" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="54" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="55" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="56" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="57" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="58" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="59" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="60" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="61" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="62" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="63" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="64" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="65" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="66" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="67" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="68" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="69" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="70" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="71" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="72" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="73" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="74" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="75" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="76" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="77" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="78" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="79" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="80" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="81" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="82" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="83" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="84" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="85" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="86" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="87" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="88" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="89" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="90" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="91" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="92" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="93" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="94" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="95" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="96" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="97" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="98" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="99" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="100" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="101" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="102" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="103" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="104" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="105" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="106" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="107" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="108" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="109" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="110" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="111" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="112" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="113" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="114" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="115" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="116" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="117" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="118" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="119" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="3" kstp="120" mode="normal"
+
+ UBDSV1 SAVING     FLOW-JA-FACE ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      3
+ UBDSV1 SAVING  STORAGE-AQUEOUS ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      3
+ UBDSV06 SAVING  SOURCE-SINK MIX IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE SSM              ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      3
+ UBDSV06 SAVING              CNC IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE CNC              ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      3
+1
+  CONCENTRATION IN LAYER   1 AT END OF TIME STEP 120 IN STRESS PERIOD    3
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2     0.999956         1.00000        0.999955         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000        0.999954         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000        0.999953         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00007         1.00000        0.999951        0.999949         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00007         10.0000         1.00000        0.999950         1.00000        0.999947         1.00000         1.00000         1.00000         1.00000    
+   7      1.00005         10.0000         1.00000         1.00000         1.00000         1.00000        0.999946         1.00000         1.00000         1.00000    
+   8      1.00000         1.00003         1.00000         1.00000         1.00000         1.00000         1.00000        0.999945        0.999942         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000        0.999943         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   2 AT END OF TIME STEP 120 IN STRESS PERIOD    3
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00002         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00001         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   3 AT END OF TIME STEP 120 IN STRESS PERIOD    3
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+
+ CONCENTRATION WILL BE SAVED ON UNIT 1029 AT END OF TIME STEP  120, STRESS PERIOD    3
+
+
+  MASS BUDGET FOR ENTIRE MODEL AT END OF TIME STEP  120, STRESS PERIOD   3
+  ---------------------------------------------------------------------------------------------------
+
+     CUMULATIVE MASS      M       RATES FOR THIS TIME STEP      M/T          PACKAGE NAME    
+     ------------------                 ------------------------                     ----------------
+
+           IN:                                      IN:
+           ---                                      ---
+     STORAGE-AQUEOUS =          59.8010       STORAGE-AQUEOUS =           3.5567     MST                              
+                 WEL =           0.0000                   WEL =           0.0000     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =           0.0000                   CHD =           0.0000     SSM_CHD-1                        
+                 CNC =          18.2500                   CNC =           0.8704     CNC                              
+
+            TOTAL IN =          78.0510              TOTAL IN =           4.4271
+
+          OUT:                                     OUT:
+          ----                                     ----
+     STORAGE-AQUEOUS =          17.0014       STORAGE-AQUEOUS =           0.8058     MST                              
+                 WEL =          16.4998                   WEL =           1.5000     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =          42.9022                   CHD =           2.0429     SSM_CHD-1                        
+                 CNC =           1.6476                   CNC =       7.8446E-02     CNC                              
+
+           TOTAL OUT =          78.0510             TOTAL OUT =           4.4271
+
+            IN - OUT =      -2.0203E-09              IN - OUT =       1.2867E-09
+
+ PERCENT DISCREPANCY =          -0.00     PERCENT DISCREPANCY =           0.00
+
+
+
+
+         TIME SUMMARY AT END OF TIME STEP  120 IN STRESS PERIOD    3
+                    SECONDS     MINUTES      HOURS       DAYS        YEARS
+                    -----------------------------------------------------------
+   TIME STEP LENGTH  7200.0      120.00      2.0000     8.33333E-02 2.28154E-04
+ STRESS PERIOD TIME 8.64000E+05  14400.      240.00      10.000     2.73785E-02
+         TOTAL TIME 1.81440E+06  30240.      504.00      21.000     5.74949E-02
+
+
+end timestep
+
+
+start timestep kper="4" kstp="1" mode="normal"
+
+
+ OUTPUT CONTROL FOR STRESS PERIOD 4 IS REPEATED USING SETTINGS FROM A PREVIOUS STRESS PERIOD.
+
+ REUSING CNCS FROM LAST STRESS PERIOD
+
+end timestep
+
+
+start timestep kper="4" kstp="2" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="3" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="4" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="5" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="6" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="7" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="8" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="9" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="10" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="11" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="12" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="13" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="14" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="15" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="16" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="17" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="18" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="19" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="20" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="21" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="22" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="23" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="24" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="25" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="26" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="27" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="28" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="29" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="30" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="31" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="32" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="33" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="34" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="35" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="36" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="37" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="38" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="39" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="40" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="41" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="42" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="43" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="44" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="45" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="46" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="47" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="48" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="49" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="50" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="51" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="52" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="53" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="54" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="55" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="56" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="57" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="58" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="59" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="60" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="61" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="62" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="63" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="64" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="65" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="66" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="67" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="68" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="69" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="70" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="71" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="72" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="73" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="74" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="75" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="76" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="77" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="78" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="79" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="80" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="81" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="82" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="83" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="84" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="85" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="86" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="87" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="88" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="89" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="90" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="91" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="92" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="93" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="94" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="95" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="96" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="97" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="98" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="99" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="100" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="101" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="102" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="103" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="104" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="105" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="106" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="107" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="108" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="109" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="110" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="111" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="112" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="113" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="114" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="115" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="116" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="117" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="118" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="119" mode="normal"
+
+
+end timestep
+
+
+start timestep kper="4" kstp="120" mode="normal"
+
+ UBDSV1 SAVING     FLOW-JA-FACE ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      4
+ UBDSV1 SAVING  STORAGE-AQUEOUS ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      4
+ UBDSV06 SAVING  SOURCE-SINK MIX IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE SSM              ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      4
+ UBDSV06 SAVING              CNC IN MODEL GWT_TRANSRIVER   PACKAGE GWT_TRANSRIVER  CONNECTED TO MODEL GWT_TRANSRIVER   PACKAGE CNC              ON UNIT   1028 AT TIME STEP    120, STRESS PERIOD      4
+1
+  CONCENTRATION IN LAYER   1 AT END OF TIME STEP 120 IN STRESS PERIOD    4
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2     0.999935         1.00000        0.999934         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000        0.999932         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000        0.999930         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00011         1.00000        0.999928        0.999924         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00011         10.0000         1.00000        0.999926         1.00000        0.999922         1.00000         1.00000         1.00000         1.00000    
+   7      1.00007         10.0000         1.00000         1.00000         1.00000         1.00000        0.999920         1.00000         1.00000         1.00000    
+   8      1.00000         1.00005         1.00000         1.00000         1.00000         1.00000         1.00000        0.999918        0.999914         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000        0.999916         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   2 AT END OF TIME STEP 120 IN STRESS PERIOD    4
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00003         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00001         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+1
+  CONCENTRATION IN LAYER   3 AT END OF TIME STEP 120 IN STRESS PERIOD    4
+  ---------------------------------------------------------------------------
+
+                1               2               3               4               5               6               7               8               9              10
+ ................................................................................................................................................................
+   1      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   2      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   3      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   4      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   5      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   6      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   7      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   8      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+   9      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  10      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  11      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  12      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  13      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  14      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+  15      1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000         1.00000    
+
+ CONCENTRATION WILL BE SAVED ON UNIT 1029 AT END OF TIME STEP  120, STRESS PERIOD    4
+
+
+  MASS BUDGET FOR ENTIRE MODEL AT END OF TIME STEP  120, STRESS PERIOD   4
+  ---------------------------------------------------------------------------------------------------
+
+     CUMULATIVE MASS      M       RATES FOR THIS TIME STEP      M/T          PACKAGE NAME    
+     ------------------                 ------------------------                     ----------------
+
+           IN:                                      IN:
+           ---                                      ---
+     STORAGE-AQUEOUS =          82.6947       STORAGE-AQUEOUS =           2.2746     MST                              
+                 WEL =           0.0000                   WEL =           0.0000     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =           0.0000                   CHD =           0.0000     SSM_CHD-1                        
+                 CNC =          26.9548                   CNC =           0.8706     CNC                              
+
+            TOTAL IN =         109.6495              TOTAL IN =           3.1452
+
+          OUT:                                     OUT:
+          ----                                     ----
+     STORAGE-AQUEOUS =          25.8874       STORAGE-AQUEOUS =           0.8740     MST                              
+                 WEL =          17.9998                   WEL =           0.1500     SSM_WEL-1                        
+                 RIV =           0.0000                   RIV =           0.0000     SSM_RIV-1                        
+                 CHD =          63.3305                   CHD =           2.0428     SSM_CHD-1                        
+                 CNC =           2.4318                   CNC =       7.8382E-02     CNC                              
+
+           TOTAL OUT =         109.6495             TOTAL OUT =           3.1452
+
+            IN - OUT =       7.2620E-10              IN - OUT =      -2.3462E-09
+
+ PERCENT DISCREPANCY =           0.00     PERCENT DISCREPANCY =          -0.00
+
+
+
+
+         TIME SUMMARY AT END OF TIME STEP  120 IN STRESS PERIOD    4
+                    SECONDS     MINUTES      HOURS       DAYS        YEARS
+                    -----------------------------------------------------------
+   TIME STEP LENGTH  7200.0      120.00      2.0000     8.33333E-02 2.28154E-04
+ STRESS PERIOD TIME 8.64000E+05  14400.      240.00      10.000     2.73785E-02
+         TOTAL TIME 2.67840E+06  44640.      744.00      31.000     8.48734E-02
+
+
+end timestep
+
