@@ -152,16 +152,15 @@ def show_well_head(
     gwf_name = 'gwf_' + model_name
     gwf = sim.get_model(gwf_name)
     heads = gwf.output.head().get_ts(wel_coords)
-    time = gwf.output.budget().get_data(text='SPDIS')[times]
     _, ax = plt.subplots()
     ax.plot(heads[:, 0], heads[:, 1], label='Well water level')
     ax.set_xlabel('Time (d)')
     ax.set_ylabel('Groundwater level (m)')
     y_stress = (y_start, y_end)
     x_stress_1 = (1, 1)
-    times_diff = time[0]
+    times_diff = times[0]
     x_stresses = []
-    for count in range(1, len(time)):
+    for count in range(1, len(times)):
         start = count * times_diff + 1
         x_stresses.append((start, start))
         x_stresses.append(y_stress)
