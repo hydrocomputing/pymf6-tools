@@ -92,6 +92,7 @@ def make_simulations(models_path):
         }
     return simulations
 
+
 def run_all_models(
     config,
     runners_path_name='runners',
@@ -105,7 +106,9 @@ def run_all_models(
     with ThreadPoolExecutor(max_workers=8) as executor:
         for runner in runners:
             name = runner.stem.split('_', 1)[1]
-            simulations = make_simulations(models_path=config['tests_path'] / name)
+            simulations = make_simulations(
+                models_path=config['tests_path'] / name
+            )
             for simulation_name, simulation_paths in simulations.items():
                 key = (name, simulation_name)
                 futures[key] = executor.submit(
@@ -129,13 +132,16 @@ def run_and_store_models(config):
 
 def make_df(dic):
     """Create data frame from dictionary."""
-    transposed_dict = {(key, sub_key): sub_values for key, values in dic.items()
-                       for sub_key, sub_values in values.items()}
+    transposed_dict = {
+        (key, sub_key): sub_values
+        for key, values in dic.items()
+        for sub_key, sub_values in values.items()
+    }
     return pd.DataFrame(transposed_dict.values(), index=transposed_dict.keys())
 
 
 def store_dfs(config):
-    """"Store model results as data frames."""
+    """ "Store model results as data frames."""
     with open(config['pickle_file_name'], 'rb') as fobj:
         res = pickle.load(fobj)
     for name, data in res.items():
@@ -144,7 +150,7 @@ def store_dfs(config):
 
 
 def run_mf6examples(config_file_name='config.ini'):
-    """Run all models and store reuslt in HDF5 files."""
+    """Run all models and store result in HDF5 files."""
     config = read_config(config_file=config_file_name)
     run_and_store_models(config)
     store_dfs(config)
