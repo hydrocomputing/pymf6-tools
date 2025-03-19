@@ -10,7 +10,7 @@ import sys
 
 import pandas as pd
 
-from config import read_config
+from pymf6_tools.mf6examples.config import read_config
 
 
 def copy_input_files(name, config):
