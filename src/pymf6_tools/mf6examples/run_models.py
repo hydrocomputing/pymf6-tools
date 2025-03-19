@@ -8,6 +8,8 @@ from shutil import copytree
 from subprocess import run
 import sys
 
+import pandas as pd
+
 from config import read_config
 
 
@@ -119,8 +121,30 @@ def run_all_models(
     return results
 
 
-def run_and_store_models(pickle_file_name='results.pcl', config_file_name='config.ini'):
+def run_and_store_models(config):
     """Run models and save results."""
-    config = read_config(config_file=config_file_name)
-    with open(pickle_file_name, 'wb') as fobj:
+    with open(config['pickle_file_name'], 'wb') as fobj:
         pickle.dump(run_all_models(config), file=fobj)
+
+
+def make_df(dic):
+    """Create data frame from dictionary."""
+    transposed_dict = {(key, sub_key): sub_values for key, values in dic.items()
+                       for sub_key, sub_values in values.items()}
+    return pd.DataFrame(transposed_dict.values(), index=transposed_dict.keys())
+
+
+def store_dfs(config):
+    """"Store model results as data frames."""
+    with open(config['pickle_file_name'], 'rb') as fobj:
+        res = pickle.load(fobj)
+    for name, data in res.items():
+        df = make_df(data)
+        df.to_hdf(config['out_path'] / f'{name}.h5', key=name)
+
+
+def run_mf6examples(config_file_name='config.ini'):
+    """Run all models and store reuslt in HDF5 files."""
+    config = read_config(config_file=config_file_name)
+    run_and_store_models(config)
+    store_dfs(config)
