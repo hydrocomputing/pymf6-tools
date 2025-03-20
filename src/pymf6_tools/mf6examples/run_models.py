@@ -141,7 +141,7 @@ def make_df(dic):
 
 
 def store_dfs(config):
-    """ "Store model results as data frames."""
+    """Store model results as data frames."""
     with open(config['pickle_file_name'], 'rb') as fobj:
         res = pickle.load(fobj)
     for name, data in res.items():
