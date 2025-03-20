@@ -24,7 +24,7 @@ class PostProcessor:
         return df[~df.success]
 
 
-def diff_mfsims(mf6_mfsim, other_mfsim):
+def diff_mfsims(lst_file_name, mf6_mfsim, other_mfsim):
     """Diff mfsim.lst created by two model runs."""
     total = 0
     diffs = 0
@@ -39,9 +39,13 @@ def diff_mfsims(mf6_mfsim, other_mfsim):
         'Total',
         'Virtual',
         'MEMORY MANAGER TOTAL STORAGE BY DATA TYPE',
+        'UNIT NUMBER:',
+        'opened on unit:'
     ]
     skip_contains_tokens = [
         'INPUT READ FROM UNIT',
+        'INPUT READ FROM UNIT'.lower(),
+        'ON UNIT',
     ]
     skip_after = 'System command used to initiate simulation:'
     old_line = ''
@@ -65,7 +69,10 @@ def diff_mfsims(mf6_mfsim, other_mfsim):
                 if old_line.startswith(skip_after):
                     continue
                 diffs += 1
-                diff_lines[total] = [line_mf6.rstrip(), line_other.rstrip()]
+                diff_lines[f'{lst_file_name}_{total}'] = [
+                    line_mf6.rstrip(),
+                    line_other.rstrip(),
+                ]
             old_line = clean_line
     return diffs, diff_lines
 
@@ -88,7 +95,7 @@ class DiffsDataFrame(pd.DataFrame):
         sel = pd.DataFrame(lines).T
         sel.columns = ['mf6', self._name_other]
         sel.index.name = 'lineno'
-        pd.set_option("display.max_colwidth", max_colwidth)
+        pd.set_option('display.max_colwidth', max_colwidth)
         return sel
 
 
@@ -102,9 +109,21 @@ def make_diffs(config, name_other, name_mf6='mf6'):
         for sub_path in sim['sub_paths']:
             model_path = Path(sim['main_path']) / sub_path
             mf6_path = Path(mf6_sims[name]['main_path']) / sub_path
-            sub_diffs[sub_path] = diff_mfsims(
-                mf6_path / 'mfsim.lst', model_path / 'mfsim.lst'
-            )
+            file_diffs = []
+            for lst_file_name in (
+                file.name for file in model_path.glob('*.lst')
+            ):
+                file_diffs.append(diff_mfsims(
+                    lst_file_name,
+                    mf6_path / lst_file_name,
+                    model_path / lst_file_name,
+                ))
+            res = (0, {})
+            for count, diff_lines in file_diffs:
+                res = (res[0] + count, res[1] | diff_lines)
+            sub_diffs[sub_path] = res
         mfsim_diff_counts[name] = sub_diffs
-    df = DiffsDataFrame.from_diffs_dict(mfsim_diff_counts, name_other=name_other)
+    df = DiffsDataFrame.from_diffs_dict(
+        mfsim_diff_counts, name_other=name_other
+    )
     return df
