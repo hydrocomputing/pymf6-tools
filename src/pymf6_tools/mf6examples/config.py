@@ -7,6 +7,8 @@ import pymf6
 
 def read_config(config_file):
     """Read config."""
+    if not Path(config_file).exists():
+        raise FileNotFoundError(config_file)
     config = ConfigParser(interpolation=ExtendedInterpolation())
     config.read(config_file)
     for name in ['mf6_exe_path', 'mf6_dll_path']:
