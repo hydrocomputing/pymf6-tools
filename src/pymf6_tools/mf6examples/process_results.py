@@ -29,6 +29,7 @@ def diff_mfsims(lst_file_name, mf6_mfsim, other_mfsim):
     total = 0
     diffs = 0
     skip_start_tokens = [
+        '#',
         'FILE TYPE:',
         'Run end date and time',
         'Elapsed run time:',
