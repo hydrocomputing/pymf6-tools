@@ -31,7 +31,7 @@ classifiers = [
 ]
 
 
-dependencies = ["flopy"]
+dependencies = ["flopy", "pymf6"]
 dynamic = ["version"]
 
 [project.scripts]
