@@ -206,7 +206,8 @@ def contour_well_heads(
 ):
     """Plot calculated heads with contour in the vector field."""
     sim = get_simulation(model_path, name)
-    gwf = sim.get_model(name)
+    gwf_name = 'gwf_' + model_name
+    gwf = sim.get_model(gwf_name)
 
     head = gwf.output.head().get_data(kstpkper=(119, 2))
     bud = gwf.output.budget()
@@ -232,7 +233,8 @@ def contour_well_heads(
 def show_bot_elevations(model_path, model_name, max_top, max_botm, layer):
     """Plot model bottom elevations."""
     sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    gwf_name = 'gwf_' + model_name
+    ml = sim.get_model(gwf_name)
     # get packages of the model
     dis = ml.get_package('dis')
     riv = ml.get_package('riv')
@@ -263,7 +265,8 @@ def show_bot_elevations(model_path, model_name, max_top, max_botm, layer):
 def contour_bot_elevations(model_path, model_name, max_top, max_botm, layer):
     """Plot model bottom elevations."""
     sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    gwf_name = 'gwf_' + model_name
+    ml = sim.get_model(gwf_name)
     # get packages of the model
     dis = ml.get_package('dis')
     riv = ml.get_package('riv')
@@ -303,7 +306,8 @@ def plot_spec_discharge(
 ):
     """Plot model specific discharge to the respective layer."""
     sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    gwf_name = 'gwf_' + model_name
+    ml = sim.get_model(gwf_name)
     spdis = ml.output.budget().get_data(text='SPDIS')[times]
     head = ml.output.head().get_alldata()[0]
     qx, qy, _ = get_specific_discharge(spdis, ml)
@@ -324,7 +328,8 @@ def plot_spec_discharge(
 def show_river_stages(model_path, model_name, layer, time_period):
     """Plot model bottom elevations."""
     sim = get_simulation(model_path, model_name)
-    ml = sim.get_model(model_name)
+    gwf_name = 'gwf_' + model_name
+    ml = sim.get_model(gwf_name)
     # get packages of the model
     dis = ml.get_package('dis')
     riv = ml.get_package('riv')
