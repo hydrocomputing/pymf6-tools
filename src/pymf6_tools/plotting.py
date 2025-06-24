@@ -199,7 +199,7 @@ def show_well_head(
 
 def contour_well_heads(
     model_path,
-    name,
+    model_name,
     title='',
     show_wells=True,
     show_inactive=False,
