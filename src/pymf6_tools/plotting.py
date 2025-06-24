@@ -205,7 +205,7 @@ def contour_well_heads(
     show_inactive=False,
 ):
     """Plot calculated heads with contour in the vector field."""
-    sim = get_simulation(model_path, name)
+    sim = get_simulation(model_path, model_name)
     gwf_name = 'gwf_' + model_name
     gwf = sim.get_model(gwf_name)
 
