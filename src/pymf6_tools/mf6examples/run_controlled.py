@@ -50,9 +50,11 @@ def copy_model_files(config, input_dir=INPUT_DIR):
     return exe_model_paths
 
 
-def run_controlled(config_file_name='config.ini'):
+def run_controlled(config_file_name='config.ini', verbose=True):
     """Run all models and store result in HDF5 files."""
     config = read_config(config_file=config_file_name)
     exe_model_paths = copy_model_files(config)
     for exe, model_path in exe_model_paths:
+        if verbose:
+            print(f'run {model_path.name}')
         run(['python', str(exe), str(model_path)], check=True)
