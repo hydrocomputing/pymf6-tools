@@ -9,3 +9,4 @@ tests/mf6_examples/models/*/tests/
 tests/mf6_examples/results.pcl
 Scratch*.ipynb
 tests/mf6_examples/out/**
+pymf6-develop.sh
